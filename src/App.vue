@@ -24,7 +24,7 @@
             <canvas id="c" width="300" height="300"></canvas>
         </div>
 
-        <!--<a id="download" href="#" download="printer.png" style="display: none;"></a>-->
+        <a id="download" href="#" download="printer.png" style="display: none;"></a>
 
     </div>
 </template>
@@ -43,12 +43,12 @@
         },
         methods: {
             onFinished: function () {
-//                document.getElementById("download").href = canvas.toDataURL('image/jpeg');
-//                document.getElementById("download").click();
+                document.getElementById("download").href = canvas.toDataURL('image/jpeg');
+                document.getElementById("download").click();
 
                 const data = new FormData()
-                data.append('uploadfile', dataURItoBlob(canvas.toDataURL()), 'canvas.png')
-                fetch('http://localhost:8100/upload', {
+                data.append('uploadfile', dataURItoBlob(canvas.toDataURL()), 'mundiscan-' + Date.now() + '.png')
+                fetch('/upload', {
                     method: 'POST',
                     body: data,
                 })
