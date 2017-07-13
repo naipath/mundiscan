@@ -1,31 +1,23 @@
 package main
 
 import (
-	"log"
+	"bufio"
+	"fmt"
 	"net"
-
-	"github.com/mdlayher/ethernet"
-	"github.com/mdlayher/raw"
 )
 
 func main() {
-	// Select the eth0 interface to use for Ethernet traffic.
-	ifi, err := net.InterfaceByName("eth0")
+	conn, err := net.Dial("tcp", "192.168.1.171:1470")
 	if err != nil {
-		log.Fatalf("failed to open interface: %v", err)
+		fmt.Print(err)
 	}
 
-	c, err := raw.ListenPacket(ifi, 0xcccc)
-	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
-	}
-	defer c.Close()
+	for {
+		status, err := bufio.NewReader(conn).ReadString('\n')
 
-	addr := &raw.Addr{HardwareAddr: ethernet.Broadcast}
-	result, err := c.WriteTo([]byte{0x01, 0x02}, addr)
-
-	if err != nil {
-		log.Print(err)
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Println("Got the following data:", status)
 	}
-	log.Print(result)
 }
