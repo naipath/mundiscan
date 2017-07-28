@@ -14,10 +14,17 @@
 
                 <div class="navbar-end">
                     <a class="navbar-item"
+                       v-bind:class="{ ['is-active']: routes.status }"
+                       href="#"
+                       @click.prevent="reroute('status')">
+                        <i class="fa fa-stethoscope"></i>&nbsp;Status
+                    </a>
+
+                    <a class="navbar-item"
                        v-bind:class="{ ['is-active']: routes.settings }"
                        href="#"
                        @click.prevent="reroute('settings')">
-                        Settings
+                        <i class="fa fa-cog"></i>&nbsp;Settings
                     </a>
                 </div>
             </div>
@@ -27,8 +34,12 @@
             <laser/>
         </div>
 
-        <div v-if="routes.settings">
+        <div v-if="routes.status">
             <status/>
+        </div>
+
+        <div v-if="routes.settings">
+            <settings/>
         </div>
     </div>
 </template>
@@ -36,17 +47,20 @@
 <script>
     import Status from "./components/Status.vue";
     import Laser from "./components/Laser.vue";
+    import Settings from "./components/Settings.vue";
 
     export default {
         name: 'app',
         components: {
             'status': Status,
-            'laser': Laser
+            'laser': Laser,
+            'settings': Settings
         },
         data () {
             return {
                 routes: {
                     laser: true,
+                    status: false,
                     settings: false,
                 }
             }
@@ -56,11 +70,19 @@
                 switch (route) {
                     case "laser":
                         this.routes.laser = true
+                        this.routes.status = false
+                        this.routes.settings = false
+                        break;
+
+                    case "status":
+                        this.routes.laser = false
+                        this.routes.status = true
                         this.routes.settings = false
                         break;
 
                     case "settings":
                         this.routes.laser = false
+                        this.routes.status = false
                         this.routes.settings = true
                         break;
                 }
