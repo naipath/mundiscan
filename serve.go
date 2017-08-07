@@ -1,4 +1,4 @@
-package mundiscan
+package main
 
 import (
 	"flag"
@@ -23,12 +23,14 @@ func main() {
 
 	clientPort := 1470
 	clientIp := "10.195.0.171"
-	client, err := mundiclient.New(clientIp, clientPort)
-	if err != nil {
-		panic("Could not get a connection to Mundi laser")
-	}
-	client.SetDebug(true)
-	defer client.Close()
+	//client, err := mundiclient.New(clientIp, clientPort)
+	//if err != nil {
+	//	panic("Could not get a connection to Mundi laser")
+	//}
+	//client.SetDebug(true)
+	//defer client.Close()
+
+	var client mundiclient.MundiClient
 
 	http.Handle("/", http.FileServer(http.Dir(*directory)))
 
