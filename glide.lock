@@ -1,0 +1,24 @@
+hash: 5a076f279306f63aa7a4d85b02b5a5f8aa39d61f23c52e7c6fe85cc115909c6e
+updated: 2017-08-07T15:02:19.890794303+02:00
+imports:
+- name: github.com/go-chi/chi
+  version: 25354a53cca531cb2efd3f1d3c565d90ff04d802
+- name: github.com/naipath/mundiclient
+  version: 26e31c4f8dd1efc1f161436d7c764a46a659fbf4
+- name: github.com/nfnt/resize
+  version: 891127d8d1b52734debe1b3c3d7e747502b6c366
+- name: golang.org/x/image
+  version: 426cfd8eeb6e08ab1932954e09e3c2cb2bc6e36d
+  subpackages:
+  - bmp
+- name: golang.org/x/text
+  version: 3bd178b88a8180be2df394a1fbb81313916f0e7b
+  subpackages:
+  - encoding
+  - encoding/internal
+  - encoding/internal/identifier
+  - encoding/unicode
+  - internal/utf8internal
+  - runes
+  - transform
+testImports: []
