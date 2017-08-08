@@ -174,10 +174,12 @@ func main() {
 			})
 
 		})
-
 	})
 
-	http.Handle("/", http.FileServer(http.Dir(*directory)))
+	r.Get("/*", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.FileServer(http.Dir(*directory)).ServeHTTP(w, r)
+	}))
+
 	log.Printf("Serving %s on HTTP port: %s\n", *directory, *port)
 	log.Fatal(http.ListenAndServe(":" + *port, r))
 }
