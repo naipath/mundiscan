@@ -50,10 +50,6 @@ func main() {
 			json.NewEncoder(w).Encode(laserClients)
 		})
 
-		r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(laserClients)
-		})
 		r.Post("/", func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Content-Type", "application/json")
 
@@ -68,35 +64,24 @@ func main() {
 			if clientErr != nil {
 				w.WriteHeader(500)
 				w.Write([]byte("{\"error\": \"Could not connect to Mundi laser\"}"))
+			} else {
+				newLaserClient := LaserClient{newClient, data.Name, data.Ip, data.Port}
+				laserClients = append(laserClients, newLaserClient)
+
+				w.WriteHeader(201)
+				json.NewEncoder(w).Encode(newLaserClient)
 			}
-
-			newLaserClient := LaserClient{newClient, data.Name, data.Ip, data.Port}
-			laserClients = append(laserClients, newLaserClient)
-
-			w.WriteHeader(201)
-			json.NewEncoder(w).Encode(newLaserClient)
 		})
 
 		r.Route("/{laserClientName}", func(r chi.Router) {
 			r.Delete("/", func(w http.ResponseWriter, r *http.Request) {
 				b := laserClients[:0]
-				b = append(b, getLaserClient(r))
+				client := getLaserClient(r)
+				client.client.Close()
+				b = append(b, client)
 				laserClients = b
 
 				w.WriteHeader(204)
-			})
-
-			r.Get("/count", func(w http.ResponseWriter, r *http.Request) {
-				w.Header().Set("Content-Type", "application/json")
-
-				client := getLaserClient(r)
-				counters, err := client.client.GetCounters()
-				if err != nil {
-					w.WriteHeader(500)
-					w.Write([]byte("{\"error\": \"Could not retrieve counters from mundiclient\"}"))
-				} else {
-					json.NewEncoder(w).Encode(counters)
-				}
 			})
 
 			r.Route("/count", func(r chi.Router) {
