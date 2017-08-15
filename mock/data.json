@@ -1,0 +1,9 @@
+{
+  "laserclients": [
+    {
+      "Name": "testing",
+      "Ip": "10.10.10.10",
+      "Port": 1470
+    }
+  ]
+}

@@ -74,6 +74,7 @@ func addLaserClient(w http.ResponseWriter, r *http.Request) {
 	if decodeErr != nil {
 		w.WriteHeader(400)
 		w.Write([]byte("{\"error\": \"Could not decode json request\"}"))
+		return
 	}
 	newClient, clientErr := mundiclient.New(data.Ip, data.Port)
 	if clientErr != nil {
@@ -123,6 +124,7 @@ func resetLaserClientCount(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.WriteHeader(500)
 		w.Write([]byte("{\"error\": \"Could not retrieve counters from mundiclient\"}"))
+		return
 	}
 	w.WriteHeader(204)
 }
@@ -137,6 +139,7 @@ func getLaserClientStatus(w http.ResponseWriter, r *http.Request) {
 	if statusDataErr != nil || statusMessageErr != nil {
 		w.WriteHeader(500)
 		w.Write([]byte("{\"error\": \"Could not retrieve status from mundiclient\"}"))
+		return
 	}
 	json.NewEncoder(w).Encode(LaserStatusRequest{statusMessage, statusData})
 }
@@ -148,7 +151,6 @@ func uploadLogoToLaser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.WriteHeader(400)
 		w.Write([]byte("{\"error\": \"Could not retrieve formfield uploadfile\"}"))
-		fmt.Println(err)
 		return
 	}
 	fmt.Fprintf(w, "%v", handler.Header)
@@ -158,7 +160,6 @@ func uploadLogoToLaser(w http.ResponseWriter, r *http.Request) {
 	if convertErr != nil {
 		w.WriteHeader(500)
 		w.Write([]byte("{\"error\": \"Could not convert file to bmp\"}"))
-		fmt.Println(convertErr)
 		return
 	}
 
@@ -168,8 +169,12 @@ func uploadLogoToLaser(w http.ResponseWriter, r *http.Request) {
 	if uploadErr != nil {
 		w.WriteHeader(500)
 		w.Write([]byte("{\"error\": \"Could not upload file to mundiclient\"}"))
-		fmt.Println(uploadErr)
 		return
 	}
 	file.Close()
+}
+
+func writeError(w http.ResponseWriter, status int, msg string) {
+	w.WriteHeader(status)
+	w.Write([]byte(msg))
 }

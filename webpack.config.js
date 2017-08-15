@@ -45,7 +45,10 @@ module.exports = {
   },
   devServer: {
     historyApiFallback: true,
-    noInfo: true
+    noInfo: true,
+    proxy: {
+      '/laserclients/*': 'http://localhost:8100/'
+    }
   },
   performance: {
     hints: false

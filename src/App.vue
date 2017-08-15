@@ -1,92 +1,86 @@
 <template>
-    <div id="app" class="container">
+    <div id="app">
+        <transition name="fade">
+            <Initializing v-if="initializing"/>
 
-        <nav class="navbar">
-            <div class="navbar-menu">
-                <div class="navbar-start">
-                    <a class="navbar-item"
-                       v-bind:class="{ ['is-active']: routes.laser }"
-                       href="#"
-                       @click.prevent="reroute('laser')">
-                        Laser
-                    </a>
+            <div v-if="!initializing">
+
+                <div v-if="laserclients.length <= 0">
+                    <section class="hero is-fullheight is-light">
+                        <div class="hero-body">
+                            <div class="container">
+
+                                <h1 class="title">Er is geen Mundi laser gevonden</h1>
+                                <h1 class="subtitle">Voeg een laser toe</h1>
+
+                                <AddLaser :handleLaser="addLaser"/>
+                            </div>
+                        </div>
+                    </section>
                 </div>
 
-                <div class="navbar-end">
-                    <a class="navbar-item"
-                       v-bind:class="{ ['is-active']: routes.status }"
-                       href="#"
-                       @click.prevent="reroute('status')">
-                        <i class="fa fa-stethoscope"></i>&nbsp;Status
-                    </a>
+                <div class="container" v-if="laserclients.length > 0">
+                    <Heading :activeRoute="activeRoute" :routeChanged="routeChanged" :routes="laserclients.map(laser => laser.Name)"/>
 
-                    <a class="navbar-item"
-                       v-bind:class="{ ['is-active']: routes.settings }"
-                       href="#"
-                       @click.prevent="reroute('settings')">
-                        <i class="fa fa-cog"></i>&nbsp;Settings
-                    </a>
+                    <About v-if="activeRoute === 'about'"/>
+
+                    <AddLaser v-if="activeRoute === 'add-laser'" :handleLaser="addLaser"/>
+
+                    <ManageLaser v-if="activeRoute.indexOf('laser') === 0" :laser="laserclients[0]"/>
+
                 </div>
             </div>
-        </nav>
-
-        <div v-if="routes.laser">
-            <laser/>
-        </div>
-
-        <div v-if="routes.status">
-            <status/>
-        </div>
-
-        <div v-if="routes.settings">
-            <settings/>
-        </div>
+        </transition>
     </div>
 </template>
 
 <script>
-    import Status from "./components/Status.vue";
-    import Laser from "./components/Laser.vue";
-    import Settings from "./components/Settings.vue";
+    import Heading from "./components/Heading.vue"
+    import About from "./components/About.vue"
+    import ManageLaser from "./components/ManageLaser.vue"
+    import AddLaser from "./components/AddLaser.vue"
+    import Initializing from "./components/Initializing.vue"
 
     export default {
         name: 'app',
         components: {
-            'status': Status,
-            'laser': Laser,
-            'settings': Settings
+            Heading,
+            About,
+            ManageLaser,
+            AddLaser,
+            Initializing,
         },
-        data () {
+        data() {
             return {
-                routes: {
-                    laser: true,
-                    status: false,
-                    settings: false,
-                }
+                initializing: true,
+                laserclients: [],
+                activeRoute: ''
             }
         },
         methods: {
-            reroute: function (route) {
-                switch (route) {
-                    case "laser":
-                        this.routes.laser = true
-                        this.routes.status = false
-                        this.routes.settings = false
-                        break;
-
-                    case "status":
-                        this.routes.laser = false
-                        this.routes.status = true
-                        this.routes.settings = false
-                        break;
-
-                    case "settings":
-                        this.routes.laser = false
-                        this.routes.status = false
-                        this.routes.settings = true
-                        break;
-                }
+            routes() {
+                return this.laserclients.map(laser => laser.Name)
+            },
+            routeChanged(route) {
+                this.activeRoute = route
+                console.log(route)
+            },
+            addLaser(laser) {
+                fetch("/laserclients", {
+                    method: 'POST',
+                    body: JSON.stringify(laser)
+                })
+                    .then(result => result.json())
+                    .then(result => this.laserclients.push(result))
             }
+        },
+        mounted: function () {
+            fetch("/laserclients")
+                .then(result => result.json())
+                .then(result => {
+                    this.laserclients = result
+                    setTimeout(() => this.initializing = false, 500)
+                })
         }
     }
 </script>
@@ -98,8 +92,11 @@
         -moz-osx-font-smoothing: grayscale;
     }
 
-    .navbar {
-        border-bottom: 1px solid #eee;
-        margin-bottom: 50px;
+    .fade-leave-active {
+        transition: opacity .5s
+    }
+
+    .fade-leave-to {
+        opacity: 0
     }
 </style>
