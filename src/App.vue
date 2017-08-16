@@ -26,7 +26,7 @@
 
                     <AddLaser v-if="activeRoute === 'add-laser'" :handleLaser="addLaser"/>
 
-                    <ManageLaser v-if="activeRoute.indexOf('laser') === 0" :laser="laserclients[0]"/>
+                    <ManageLaser v-if="activeRoute.indexOf('manage-laser') === 0" :laser="laserclients.find(client => client.Name == 'testing')"/>
 
                 </div>
             </div>
@@ -63,7 +63,6 @@
             },
             routeChanged(route) {
                 this.activeRoute = route
-                console.log(route)
             },
             addLaser(laser) {
                 fetch("/laserclients", {
@@ -79,6 +78,9 @@
                 .then(result => result.json())
                 .then(result => {
                     this.laserclients = result
+                    if (this.laserclients.length > 0) {
+                        this.activeRoute = "manage-laser/" + this.laserclients[0].Name
+                    }
                     setTimeout(() => this.initializing = false, 500)
                 })
         }
