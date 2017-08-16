@@ -15,7 +15,10 @@
         <div class="navbar-menu">
 
             <div class="navbar-start" v-for="route in routes">
-                <a class="navbar-item" href="#" @click="routeChanged('laser/' + route)">{{route}}</a>
+                <a class="navbar-item"
+                   href="#"
+                   @click="routeChanged('manage-laser/' + route)"
+                   v-bind:class="{'is-active': activeRoute === 'manage-laser/' + route}">{{route}}</a>
             </div>
 
             <div class="navbar-end">
