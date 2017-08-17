@@ -30,11 +30,11 @@
 
                     <AddLaser v-if="activeRoute === 'add-laser'" :handleLaser="addLaser"/>
 
-                    <ManageLaser v-if="activeRoute === 'manage-laser'" :laser="laserclients.find(client => client.Name == activeLaser)"/>
+                    <ManageLaser v-if="activeRoute === 'manage-laser'" :laser="getActiveLaser()"/>
 
-                    <Status v-if="activeRoute === 'status'" :laser="laserclients.find(client => client.Name == activeLaser)"/>
+                    <Status v-if="activeRoute === 'status'" :laser="getActiveLaser()"/>
 
-                    <Settings v-if="activeRoute === 'settings'" :laser="laserclients.find(client => client.Name == activeLaser)"/>
+                    <Settings v-if="activeRoute === 'settings'" :laser="getActiveLaser()"/>
 
                 </div>
             </div>
@@ -81,13 +81,20 @@
                 this.activeLaser = laserName
                 this.activeRoute = 'manage-laser'
             },
+            getActiveLaser() {
+                return this.laserclients.find(client => client.Name === this.activeLaser)
+            },
             addLaser(laser) {
                 fetch("/laserclients", {
                     method: 'POST',
                     body: JSON.stringify(laser)
                 })
                     .then(result => result.json())
-                    .then(result => this.laserclients.push(result))
+                    .then(result => {
+                        this.laserclients.push(result)
+                        this.activeRoute = 'manage-laser'
+                        this.activeLaser = result.Name
+                    })
             }
         },
         mounted: function () {

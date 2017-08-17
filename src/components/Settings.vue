@@ -11,11 +11,22 @@
 
         <div class="field is-horizontal">
             <div class="field-label is-normal">
+                <label class="label">Name</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <input class="input" v-model="client.Name" readonly>
+                </div>
+            </div>
+        </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
                 <label class="label">IP</label>
             </div>
             <div class="field-body">
                 <div class="field">
-                    <input class="input" type="text" v-model="client.ip" readonly>
+                    <input class="input" v-model="client.Ip" readonly>
                 </div>
             </div>
         </div>
@@ -26,12 +37,12 @@
             </div>
             <div class="field-body">
                 <div class="field">
-                    <input class="input" type="text" v-model="client.port" readonly>
+                    <input class="input" v-model="client.Port" type="number" readonly>
                 </div>
             </div>
         </div>
 
-        <hr />
+        <hr/>
 
         <div class="columns">
             <h1 class="title column">Counters</h1>
@@ -46,7 +57,7 @@
             </div>
             <div class="field-body">
                 <div class="field">
-                    <input class="input" type="text" v-model="counters.Recent" readonly>
+                    <input class="input" v-model="counters.Recent" readonly>
                 </div>
             </div>
         </div>
@@ -56,7 +67,7 @@
             </div>
             <div class="field-body">
                 <div class="field">
-                    <input class="input" type="text" v-model="counters.Lifetime" readonly>
+                    <input class="input" v-model="counters.Lifetime" readonly>
                 </div>
             </div>
         </div>
@@ -66,33 +77,38 @@
 <script>
     export default {
         name: 'settings',
-        data () {
+        props: {
+            laser: Object,
+        },
+        data() {
             return {
                 client: {
-                    ip: '-',
-                    port: '-'
+                    Name: '-',
+                    Ip: '-',
+                    Port: 0,
                 },
                 counters: {
                     Lifetime: '-',
-                    Recent: '-'
-                }
+                    Recent: '-',
+                },
             }
         },
         methods: {
             getSettings: function () {
-                fetch('/counters')
+                fetch('/laserclients/' + this.laser.Name + '/count')
                     .then(resp => resp.json())
                     .then(msg => this.counters = msg)
-                fetch('/clientSettings')
+                fetch('/laserclients/' + this.laser.Name)
                     .then(resp => resp.json())
                     .then(msg => this.client = msg)
             },
-            resetCount: function() {
-                fetch('/resetCurrentCount').then(() => this.getSettings())
-            }
+            resetCount: function () {
+                fetch('/laserclients/' + this.laser.Name + '/count', {method: "DELETE"})
+                    .then(() => this.getSettings())
+            },
         },
         mounted() {
             this.getSettings()
-        }
+        },
     }
 </script>

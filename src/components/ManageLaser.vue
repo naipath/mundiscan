@@ -45,6 +45,9 @@
 
     export default {
         name: 'app',
+        props: {
+            laser: Object
+        },
         data() {
             return {
                 showFileChooser: true,
@@ -63,7 +66,7 @@
 
                 const data = new FormData()
                 data.append('uploadfile', dataURItoBlob(canvas.toDataURL()), 'mundiscan-' + Date.now() + '.png')
-                fetch('/upload', {
+                fetch('/laserclients/'+ this.laser.Name + '/upload', {
                     method: 'POST',
                     body: data,
                 })

@@ -258,19 +258,13 @@
         },
         methods: {
             retrieveMundiStatus: function () {
-                fetch("/laserclients/" + laser.Name + "/status")
+                fetch("/laserclients/" + this.laser.Name + "/status")
                     .then(response => response.json())
                     .then(msg => {
                         this.statusMessage = msg.Message
-                        this.statusData = msg.Statu
+                        this.statusData = msg.Status
                     })
                     .catch(err => this.statusData = "Something went wrong with retrieving the status")
-
-                setTimeout(() => fetch("/statusData")
-                    .then(response => response.json())
-                    .then(msg => this.statusData = msg)
-                    .catch(err => this.statusData = "Something went wrong with retrieving the status"), 400)
-
             },
         },
         mounted() {
