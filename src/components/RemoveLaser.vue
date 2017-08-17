@@ -32,7 +32,7 @@
                 fetch("/laserclients/" + this.laser.Name, {method: "DELETE"})
                     .then(() => {
                         this.isLoading = false
-                        this.removed(laser.Name)
+                        this.removed(this.laser.Name)
                     })
             }
         }

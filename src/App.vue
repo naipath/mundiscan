@@ -100,8 +100,8 @@
                         this.activeLaser = result.Name
                     })
             },
-            removeLaser(laser) {
-                this.laserclients = this.laserclients.filter(client => client.Name !== laser.Name)
+            removeLaser(laserName) {
+                this.laserclients = this.laserclients.filter(client => client.Name !== laserName)
                 this.activeLaser = ''
                 this.activeRoute = 'add-laser'
             }
