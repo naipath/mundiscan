@@ -118,6 +118,8 @@ func addLaserClient(w http.ResponseWriter, r *http.Request) {
 
 		w.WriteHeader(201)
 		json.NewEncoder(w).Encode(newLaserClient)
+
+		defer SaveLaserClientsToDisk(*settingsFile)
 	}
 }
 
@@ -133,6 +135,7 @@ func deleteLaserClient(w http.ResponseWriter, r *http.Request) {
 	}
 	laserClients = newClients
 	w.WriteHeader(204)
+	defer SaveLaserClientsToDisk(*settingsFile)
 }
 
 func retrieveLaserClient(w http.ResponseWriter, r *http.Request) {
