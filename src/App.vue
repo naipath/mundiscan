@@ -30,6 +30,8 @@
 
                     <AddLaser v-if="activeRoute === 'add-laser'" :handleLaser="addLaser"/>
 
+                    <RemoveLaser v-if="activeRoute === 'remove'" :removed="removeLaser" :laser="getActiveLaser()"/>
+
                     <ManageLaser v-if="activeRoute === 'manage-laser'" :laser="getActiveLaser()"/>
 
                     <Status v-if="activeRoute === 'status'" :laser="getActiveLaser()"/>
@@ -47,6 +49,7 @@
     import About from "./components/About.vue"
     import ManageLaser from "./components/ManageLaser.vue"
     import AddLaser from "./components/AddLaser.vue"
+    import RemoveLaser from "./components/RemoveLaser.vue"
     import Initializing from "./components/Initializing.vue"
     import Status from "./components/Status.vue"
     import Settings from "./components/Settings.vue"
@@ -58,6 +61,7 @@
             About,
             ManageLaser,
             AddLaser,
+            RemoveLaser,
             Initializing,
             Status,
             Settings,
@@ -95,6 +99,11 @@
                         this.activeRoute = 'manage-laser'
                         this.activeLaser = result.Name
                     })
+            },
+            removeLaser(laser) {
+                this.laserclients = this.laserclients.filter(client => client.Name !== laser.Name)
+                this.activeLaser = ''
+                this.activeRoute = 'add-laser'
             }
         },
         mounted: function () {

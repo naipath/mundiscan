@@ -36,10 +36,16 @@
                     <i class="fa fa-stethoscope"></i>&nbsp;Status
                 </a>
                 <a class="navbar-item"
-                   v-bind:class="{ ['is-active']: activeRoute === 'settings'  }"
+                   v-bind:class="{ ['is-active']: activeRoute === 'settings'}"
                    href="#"
                    @click.prevent="routeChanged('settings')">
                     <i class="fa fa-cog"></i>&nbsp;Instellingen
+                </a>
+                <a class="navbar-item"
+                   v-bind:class="{ 'is-active': activeRoute === 'remove'}"
+                   href="#"
+                   @click.prevent="routeChanged('remove')">
+                    <i class="fa fa-trash"></i>&nbsp;Verwijder
                 </a>
             </div>
         </div>
