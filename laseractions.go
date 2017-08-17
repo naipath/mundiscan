@@ -51,6 +51,13 @@ func InitializeLaserClients(settingsFile string) {
 		if len(laserClients) == 0 {
 			laserClients = make([]LaserClient, 0)
 		}
+		for index := range laserClients {
+			newClient, clientErr := mundiclient.New(laserClients[index].Ip, laserClients[index].Port)
+			if clientErr != nil {
+				panic("Could not connect to mundiclient " + laserClients[index].Ip + " with name " + laserClients[index].Name)
+			}
+			laserClients[index].client = newClient
+		}
 	}
 }
 
@@ -67,9 +74,9 @@ func SaveLaserClientsToDisk(settingsFile string) {
 
 func getLaserClient(r *http.Request) LaserClient {
 	laserClientName := chi.URLParam(r, "laserClientName")
-	for _, x := range laserClients {
-		if x.Name == laserClientName {
-			return x
+	for index := range laserClients {
+		if laserClients[index].Name == laserClientName {
+			return laserClients[index]
 		}
 	}
 	return LaserClient{}
