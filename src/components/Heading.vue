@@ -17,8 +17,8 @@
             <div class="navbar-start">
                 <a class="navbar-item" v-for="route in routes"
                    href="#"
-                   @click="routeChanged('manage-laser/' + route)"
-                   v-bind:class="{'is-active': activeRoute === 'manage-laser/' + route}">{{route}}</a>
+                   @click="laserChanged(route)"
+                   v-bind:class="{'is-active': activeLaser === route}">{{route}}</a>
 
                 <a class="navbar-item"
                    v-bind:class="{'is-active': activeRoute === 'add-laser'}"
@@ -30,16 +30,15 @@
 
             <div class="navbar-end">
                 <a class="navbar-item"
-                   v-bind:class="{ 'is-active': activeRoute.indexOf('/status') >= 0 }"
+                   v-bind:class="{ 'is-active': activeRoute === 'status'}"
                    href="#"
-                   @click.prevent="routeChanged('manage-laser/' + activeRoute + '/status')">
+                   @click.prevent="routeChanged('status')">
                     <i class="fa fa-stethoscope"></i>&nbsp;Status
                 </a>
-
                 <a class="navbar-item"
-                   v-bind:class="{ ['is-active']: activeRoute.indexOf('/settings') >= 0  }"
+                   v-bind:class="{ ['is-active']: activeRoute === 'settings'  }"
                    href="#"
-                   @click.prevent="routeChanged('manage-laser/' + activeRoute + '/settings')">
+                   @click.prevent="routeChanged('settings')">
                     <i class="fa fa-cog"></i>&nbsp;Instellingen
                 </a>
             </div>
@@ -53,6 +52,8 @@
             routes: Array,
             routeChanged: Function,
             activeRoute: String,
+            laserChanged: Function,
+            activeLaser: String,
         }
     }
 </script>

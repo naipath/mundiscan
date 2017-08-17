@@ -2,12 +2,12 @@
     <div id="app">
 
         <div class="columns">
-            <h1 class="title column">Status message</h1>
+            <h1 class="title column">Status</h1>
             <div class="column">
                 <button class="button is-info is-pulled-right" @click="retrieveMundiStatus">Refresh</button>
             </div>
         </div>
-        <input class="input" type="text" v-model="statusMessage" readonly>
+        <input class="input" v-model="statusMessage" readonly>
 
         <hr/>
 
@@ -247,6 +247,9 @@
 <script>
     export default {
         name: 'app',
+        props: {
+            laser: Object,
+        },
         data() {
             return {
                 statusMessage: "Press refresh to obtain a new status",
@@ -255,9 +258,12 @@
         },
         methods: {
             retrieveMundiStatus: function () {
-                fetch("/statusMessage")
+                fetch("/laserclients/" + laser.Name + "/status")
                     .then(response => response.json())
-                    .then(msg => this.statusMessage = msg.StatusMessage)
+                    .then(msg => {
+                        this.statusMessage = msg.Message
+                        this.statusData = msg.Statu
+                    })
                     .catch(err => this.statusData = "Something went wrong with retrieving the status")
 
                 setTimeout(() => fetch("/statusData")

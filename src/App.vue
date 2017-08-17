@@ -20,13 +20,21 @@
                 </div>
 
                 <div class="container" v-if="laserclients.length > 0">
-                    <Heading :activeRoute="activeRoute" :routeChanged="routeChanged" :routes="laserclients.map(laser => laser.Name)"/>
+                    <Heading :activeRoute="activeRoute"
+                             :routeChanged="routeChanged"
+                             :routes="laserclients.map(laser => laser.Name)"
+                             :laserChanged="laserChanged"
+                             :activeLaser="activeLaser"/>
 
                     <About v-if="activeRoute === 'about'"/>
 
                     <AddLaser v-if="activeRoute === 'add-laser'" :handleLaser="addLaser"/>
 
-                    <ManageLaser v-if="activeRoute.indexOf('manage-laser') === 0" :laser="laserclients.find(client => client.Name == 'testing')"/>
+                    <ManageLaser v-if="activeRoute === 'manage-laser'" :laser="laserclients.find(client => client.Name == activeLaser)"/>
+
+                    <Status v-if="activeRoute === 'status'" :laser="laserclients.find(client => client.Name == activeLaser)"/>
+
+                    <Settings v-if="activeRoute === 'settings'" :laser="laserclients.find(client => client.Name == activeLaser)"/>
 
                 </div>
             </div>
@@ -40,6 +48,8 @@
     import ManageLaser from "./components/ManageLaser.vue"
     import AddLaser from "./components/AddLaser.vue"
     import Initializing from "./components/Initializing.vue"
+    import Status from "./components/Status.vue"
+    import Settings from "./components/Settings.vue"
 
     export default {
         name: 'app',
@@ -49,12 +59,15 @@
             ManageLaser,
             AddLaser,
             Initializing,
+            Status,
+            Settings,
         },
         data() {
             return {
                 initializing: true,
                 laserclients: [],
-                activeRoute: ''
+                activeRoute: '',
+                activeLaser: ''
             }
         },
         methods: {
@@ -63,6 +76,10 @@
             },
             routeChanged(route) {
                 this.activeRoute = route
+            },
+            laserChanged(laserName) {
+                this.activeLaser = laserName
+                this.activeRoute = 'manage-laser'
             },
             addLaser(laser) {
                 fetch("/laserclients", {

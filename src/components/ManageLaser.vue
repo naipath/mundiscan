@@ -30,7 +30,7 @@
         </div>
 
         <div class="column" v-if="!showFileChooser">
-            <canvas id="c" width="800" height="500"></canvas>
+            <canvas id="c" width="630" height="630"></canvas>
         </div>
 
         <a id="download" href="#" download="printer.png" style="display: none;"></a>
