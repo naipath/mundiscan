@@ -17,4 +17,7 @@ npm run build
 
 For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
 
-Some sensible default client config could be: {"Ip": "10.195.0.171", "Port": 1470, "Name": "testing"}
+In order to quickly get started use the following command:
+```
+npm run build && go run *.go -statics dist -settings ./settings.yml
+```
