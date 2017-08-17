@@ -11,11 +11,17 @@ var (
 	path *string
 )
 
+const noSettings = "no-settings"
+
 func main() {
-	port := flag.String("p", "8100", "port to serve on")
-	directory := flag.String("d", ".", "the directory of static file to host")
+	port := flag.String("port", "8100", "port to serve on")
+	directory := flag.String("statics", ".", "the directory of static files to host")
 	path = flag.String("path", "./", "The path to write file uploads to")
+	settingsFile := flag.String("settings", noSettings, "The path to read and write the settings file to, which contains the laserClients")
 	flag.Parse()
+
+	InitializeLaserClients(*settingsFile)
+	defer SaveLaserClientsToDisk(*settingsFile)
 
 	r := chi.NewRouter()
 
@@ -40,5 +46,5 @@ func main() {
 	}))
 
 	log.Printf("Serving %s on HTTP port: %s\n", *directory, *port)
-	log.Fatal(http.ListenAndServe(":"+*port, r))
+	log.Fatal(http.ListenAndServe(":" + *port, r))
 }

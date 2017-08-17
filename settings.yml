@@ -1,0 +1,9 @@
+# This file can be used to save the settings of the lasers at application startup
+
+# Example:
+- name: Front
+  ip: 127.0.0.1
+  port: 1470
+- name: Back
+  ip: 127.0.0.1
+  port: 1471

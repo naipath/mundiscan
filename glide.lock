@@ -1,5 +1,5 @@
-hash: 5a076f279306f63aa7a4d85b02b5a5f8aa39d61f23c52e7c6fe85cc115909c6e
-updated: 2017-08-16T20:59:23.44296132+02:00
+hash: ad1749207d788df7cc3da45cfeb819570597df39ac86d8745511dfa3ec6239d3
+updated: 2017-08-16T21:03:25.91800058+02:00
 imports:
 - name: github.com/go-chi/chi
   version: 25354a53cca531cb2efd3f1d3c565d90ff04d802
@@ -21,4 +21,6 @@ imports:
   - internal/utf8internal
   - runes
   - transform
+- name: gopkg.in/yaml.v2
+  version: eb3733d160e74a9c7e442f435eb3bea458e1d19f
 testImports: []

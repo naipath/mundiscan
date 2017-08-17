@@ -11,6 +11,9 @@ import (
 	"github.com/nfnt/resize"
 	"golang.org/x/image/bmp"
 	"github.com/naipath/mundiclient"
+	"io/ioutil"
+	"gopkg.in/yaml.v2"
+	"log"
 )
 
 type LaserClient struct {
@@ -20,7 +23,7 @@ type LaserClient struct {
 	Port   int
 }
 
-var laserClients = make([]LaserClient, 0)
+var laserClients []LaserClient
 
 type CreateLaserClientRequest struct {
 	Name string
@@ -32,6 +35,33 @@ type LaserStatusRequest struct {
 	Message string
 	Status  mundiclient.StatusData
 }
+
+
+func InitializeLaserClients(settingsFile string) {
+	if settingsFile == noSettings {
+		laserClients = make([]LaserClient, 0)
+	} else {
+		settingsData, readErr := ioutil.ReadFile(settingsFile)
+		if readErr !=  nil {
+			panic(readErr)
+		}
+		err := yaml.Unmarshal(settingsData, &laserClients)
+		if err != nil {
+			panic(err)
+		}
+	}
+}
+
+func SaveLaserClientsToDisk(settingsFile string) {
+	if settingsFile != noSettings {
+		settingsFileData, _ := yaml.Marshal(&laserClients)
+		err := ioutil.WriteFile(settingsFile, settingsFileData, os.ModePerm)
+		if err != nil {
+			log.Fatalf("error: %v", err)
+		}
+	}
+}
+
 
 func getLaserClient(r *http.Request) LaserClient {
 	laserClientName := chi.URLParam(r, "laserClientName")
@@ -172,9 +202,4 @@ func uploadLogoToLaser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	file.Close()
-}
-
-func writeError(w http.ResponseWriter, status int, msg string) {
-	w.WriteHeader(status)
-	w.Write([]byte(msg))
 }
