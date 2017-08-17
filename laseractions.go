@@ -13,7 +13,6 @@ import (
 	"github.com/naipath/mundiclient"
 	"io/ioutil"
 	"gopkg.in/yaml.v2"
-	"log"
 )
 
 type LaserClient struct {
@@ -49,6 +48,9 @@ func InitializeLaserClients(settingsFile string) {
 		if err != nil {
 			panic(err)
 		}
+		if len(laserClients) == 0 {
+			laserClients = make([]LaserClient, 0)
+		}
 	}
 }
 
@@ -57,7 +59,7 @@ func SaveLaserClientsToDisk(settingsFile string) {
 		settingsFileData, _ := yaml.Marshal(&laserClients)
 		err := ioutil.WriteFile(settingsFile, settingsFileData, os.ModePerm)
 		if err != nil {
-			log.Fatalf("error: %v", err)
+			panic(err)
 		}
 	}
 }
@@ -131,6 +133,11 @@ func deleteLaserClient(w http.ResponseWriter, r *http.Request) {
 	}
 	laserClients = newClients
 	w.WriteHeader(204)
+}
+
+func retrieveLaserClient(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(getLaserClient(r))
 }
 
 func getLaserClientCount(w http.ResponseWriter, r *http.Request) {

@@ -30,6 +30,7 @@ func main() {
 		r.Post("/", addLaserClient)
 
 		r.Route("/{laserClientName}", func(r chi.Router) {
+			r.Get("/", retrieveLaserClient)
 			r.Delete("/", deleteLaserClient)
 			r.Get("/status", getLaserClientStatus)
 			r.Post("/upload", uploadLogoToLaser)
