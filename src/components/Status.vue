@@ -14,232 +14,14 @@
         <h1 class="title">Status data</h1>
 
         <div class="columns">
-            <div class="column">
-                <div>
+            <div class="column" v-for="metricRow in metricRows">
+                <div v-for="metric in metricRow">
                     <label class="checkbox">
-                        <input type="checkbox" @click.prevent v-model="statusData.PrintStatus">
-                        Print status
-                    </label>
-                </div>
-
-                <div>
-                    <label class="checkbox">
-                        <input type="checkbox" @click.prevent v-model="statusData.FailureStatus">
-                        Failure status
-                    </label>
-                </div>
-
-                <div>
-                    <label class="checkbox">
-                        <input type="checkbox" @click.prevent v-model="statusData.WarningStatus">
-                        Warning status
-                    </label>
-                </div>
-
-                <div>
-                    <label class="checkbox">
-                        <input type="checkbox" @click.prevent v-model="statusData.MaintenanceStatus">
-                        Maintenance status
+                        <input type="checkbox" @click.prevent v-model="metric.value">
+                        {{metric.label}}
                     </label>
                 </div>
             </div>
-            <div class="column">
-                <div>
-                    <label class="checkbox">
-                        <input type="checkbox" @click.prevent v-model="statusData.DetectorFault">
-                        Detector fault
-                    </label>
-                </div>
-
-                <div>
-                    <label class="checkbox">
-                        <input type="checkbox" @click.prevent v-model="statusData.MarkNotLoaded">
-                        Mark not loaded
-                    </label>
-                </div>
-
-                <div>
-                    <label class="checkbox">
-                        <input type="checkbox" @click.prevent v-model="statusData.CodeParametersNotLoaded">
-                        Code parameters not loaded
-                    </label>
-                </div>
-
-                <div>
-                    <label class="checkbox">
-                        <input type="checkbox" @click.prevent v-model="statusData.TestingLaser">
-                        Testing laser
-                    </label>
-                </div>
-
-                <div>
-                    <label class="checkbox">
-                        <input type="checkbox" @click.prevent v-model="statusData.DisableShutter">
-                        Disable shutter
-                    </label>
-                </div>
-
-                <div>
-                    <label class="checkbox">
-                        <input type="checkbox" @click.prevent
-                               v-model="statusData.ExternalUpdateSingleShotNotUpdated">
-                        External update, single shot not updated
-                    </label>
-                </div>
-
-                <div>
-                    <label class="checkbox">
-                        <input type="checkbox" @click.prevent v-model="statusData.ComPortDisconnected">
-                        Com port disconnected
-                    </label>
-                </div>
-
-                <div>
-                    <label class="checkbox">
-                        <input type="checkbox" @click.prevent v-model="statusData.BarcodeError">
-                        Barcode error
-                    </label>
-                </div>
-            </div>
-            <div class="column">
-                <div>
-                    <label class="checkbox">
-                        <input type="checkbox" @click.prevent v-model="statusData.EStop">
-                        E stop
-                    </label>
-                </div>
-
-                <div>
-                    <label class="checkbox">
-                        <input type="checkbox" @click.prevent v-model="statusData.ExternalInterlocks">
-                        External interlocks
-                    </label>
-                </div>
-
-                <div>
-                    <label class="checkbox">
-                        <input type="checkbox" @click.prevent v-model="statusData.CoolantTemperature">
-                        Coolant temperature
-                    </label>
-                </div>
-
-                <div>
-                    <label class="checkbox">
-                        <input type="checkbox" @click.prevent v-model="statusData.DC24Volts">
-                        DC 24 volts
-                    </label>
-                </div>
-
-                <div>
-                    <label class="checkbox">
-                        <input type="checkbox" @click.prevent v-model="statusData.ShutterKeyswitch">
-                        Shutter keyswitch
-                    </label>
-                </div>
-
-                <div>
-                    <label class="checkbox">
-                        <input type="checkbox" @click.prevent v-model="statusData.Keyswitch">
-                        Keyswitch
-                    </label>
-                </div>
-
-                <div>
-                    <label class="checkbox">
-                        <input type="checkbox" @click.prevent v-model="statusData.DC48Volts">
-                        DC 48 volts
-                    </label>
-                </div>
-
-
-            </div>
-            <div class="column">
-                <div>
-                    <label class="checkbox">
-                        <input type="checkbox" @click.prevent v-model="statusData.CoolantFlow">
-                        Coolant Flow
-                    </label>
-                </div>
-
-                <div>
-                    <label class="checkbox">
-                        <input type="checkbox" @click.prevent v-model="statusData.EmissionIndicator">
-                        Emission indicator
-                    </label>
-                </div>
-                <div>
-                    <label class="checkbox">
-                        <input type="checkbox" @click.prevent v-model="statusData.ShutterPrint">
-                        Shutter print
-                    </label>
-                </div>
-                <div>
-                    <label class="checkbox">
-                        <input type="checkbox" @click.prevent v-model="statusData.ShutterStandby">
-                        Shutter standby
-                    </label>
-                </div>
-
-                <div>
-                    <label class="checkbox">
-                        <input type="checkbox" @click.prevent v-model="statusData.VSWRError">
-                        VSWR error
-                    </label>
-                </div>
-
-                <div>
-                    <label class="checkbox">
-                        <input type="checkbox" @click.prevent v-model="statusData.OverModulation">
-                        Over modulation
-                    </label>
-                </div>
-                <div>
-                    <label class="checkbox">
-                        <input type="checkbox" @click.prevent v-model="statusData.TachoFault">
-                        Tacho fault
-                    </label>
-                </div>
-                <div>
-                    <label class="checkbox">
-                        <input type="checkbox" @click.prevent v-model="statusData.RFStatus">
-                        RF status
-                    </label>
-                </div>
-            </div>
-
-            <div class="column">
-                <div>
-                    <label class="checkbox">
-                        <input type="checkbox" @click.prevent v-model="statusData.SystemEnable">
-                        System enable
-                    </label>
-                </div>
-                <div>
-                    <label class="checkbox">
-                        <input type="checkbox" @click.prevent v-model="statusData.VapourExtractorFault">
-                        Vapour extractor fault
-                    </label>
-                </div>
-                <div>
-                    <label class="checkbox">
-                        <input type="checkbox" @click.prevent v-model="statusData.GalvoPower">
-                        Galvo power
-                    </label>
-                </div>
-                <div>
-                    <label class="checkbox">
-                        <input type="checkbox" @click.prevent v-model="statusData.GalvoTemperature">
-                        Galvo temperature
-                    </label>
-                </div>
-                <div>
-                    <label class="checkbox">
-                        <input type="checkbox" @click.prevent v-model="statusData.GalvoCableDisconnected">
-                        Galvo cable disconnected
-                    </label>
-                </div>
-            </div>
-
         </div>
     </div>
 </template>
@@ -251,9 +33,90 @@
             laser: Object,
         },
         data() {
-            return {
+            const status = {
                 statusMessage: "Press refresh to obtain a new status",
-                statusData: {}
+                statusData: {
+                    PrintStatus: false,
+                    FailureStatus: false,
+                    WarningStatus: false,
+                    MaintenanceStatus: false,
+                    DetectorFault: false,
+                    MarkNotLoaded: false,
+                    CodeParametersNotLoaded: false,
+                    TestingLaser: false,
+                    DisableShutter: false,
+                    ExternalUpdateSingleShotNotUpdated: false,
+                    ComPortDisconnected: false,
+                    BarcodeError: false,
+                    EStop: false,
+                    ExternalInterlocks: false,
+                    CoolantTemperature: false,
+                    DC24Volts: false,
+                    ShutterKeyswitch: false,
+                    Keyswitch: false,
+                    DC48Volts: false,
+                    CoolantFlow: false,
+                    EmissionIndicator: false,
+                    ShutterPrint: false,
+                    ShutterStandby: false,
+                    VSWRError: false,
+                    OverModulation: false,
+                    TachoFault: false,
+                    RFStatus: false,
+                    SystemEnable: false,
+                    VapourExtractorFault: false,
+                    GalvoPower: false,
+                    GalvoTemperature: false,
+                    GalvoCableDisconnected: false,
+                }
+            }
+            return {
+                statusMessage: status.statusMessage,
+                statusData: status.statusData,
+                metricRows: [
+                    [
+                        {label: 'Print status', value: status.statusData.PrintStatus},
+                        {label: 'Failure status', value: status.statusData.FailureStatus},
+                        {label: 'Warning status', value: status.statusData.WarningStatus},
+                        {label: 'Maintenance status', value: status.statusData.MaintenanceStatus},
+                    ],
+                    [
+                        {label: 'Detector fault', value: status.statusData.DetectorFault},
+                        {label: 'Mark not loaded', value: status.statusData.MarkNotLoaded},
+                        {label: 'Code parameters not loaded', value: status.statusData.CodeParametersNotLoaded},
+                        {label: 'Testing laser', value: status.statusData.TestingLaser},
+                        {label: 'Disable shutter', value: status.statusData.DisableShutter},
+                        {label: 'External update, single shot not updated', value: status.statusData.ExternalUpdateSingleShotNotUpdated},
+                        {label: 'Com port disconnected', value: status.statusData.ComPortDisconnected},
+                        {label: 'Barcode error', value: status.statusData.BarcodeError},
+                    ],
+                    [
+                        {label: 'E stop', value: status.statusData.EStop},
+                        {label: 'External interlocks', value: status.statusData.ExternalInterlocks},
+                        {label: 'Coolant temperature', value: status.statusData.CoolantTemperature},
+                        {label: 'DC 24 volts', value: status.statusData.DC24Volts},
+                        {label: 'Shutter keyswitch', value: status.statusData.ShutterKeyswitch},
+                        {label: 'Keyswitch', value: status.statusData.Keyswitch},
+                        {label: 'DC 48 volts', value: status.statusData.DC48Volts},
+                    ],
+                    [
+                        {label: 'Coolant flow', value: status.statusData.CoolantFlow},
+                        {label: 'Emission indicator', value: status.statusData.EmissionIndicator},
+                        {label: 'Shutter print', value: status.statusData.ShutterPrint},
+                        {label: 'Shutter standby', value: status.statusData.ShutterStandby},
+                        {label: 'VSWR error', value: status.statusData.VSWRError},
+                        {label: 'Over modulation', value: status.statusData.OverModulation},
+                        {label: 'Tacho fault', value: status.statusData.TachoFault},
+                        {label: 'RF status', value: status.statusData.RFStatus},
+                    ],
+                    [
+                        {label: 'System enable', value: status.statusData.SystemEnable},
+                        {label: 'Vapour extractor fault', value: status.statusData.VapourExtractorFault},
+                        {label: 'Galvo power', value: status.statusData.GalvoPower},
+                        {label: 'Galvo temperature', value: status.statusData.GalvoTemperature},
+                        {label: 'Galvo cable disconnected', value: status.statusData.GalvoCableDisconnected},
+                    ],
+                ]
             }
         },
         methods: {
