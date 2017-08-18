@@ -60,19 +60,6 @@
             }
         },
         methods: {
-            onFinished: function () {
-                document.getElementById("download").href = canvas.toDataURL('image/jpeg');
-                document.getElementById("download").click();
-
-                const data = new FormData()
-                data.append('uploadfile', dataURItoBlob(canvas.toDataURL()), 'mundiscan-' + Date.now() + '.png')
-                fetch('/laserclients/'+ this.laser.Id + '/upload', {
-                    method: 'POST',
-                    body: data,
-                })
-                    .then(result => console.log(result))
-                    .catch(err => console.log(err))
-            },
             addText: function () {
                 this.noTextAdded = false;
                 const text = new fabric.IText('Typ hier text');
@@ -100,6 +87,19 @@
                 } else {
                     alert('The File APIs are not fully supported in this browser.');
                 }
+            },
+            onFinished: function () {
+                document.getElementById("download").href = canvas.toDataURL('image/jpeg');
+                document.getElementById("download").click();
+
+                const data = new FormData()
+                data.append('uploadfile', dataURItoBlob(canvas.toDataURL()), 'mundiscan-' + Date.now() + '.png')
+                fetch('/laserclients/'+ this.laser.Id + '/upload', {
+                    method: 'POST',
+                    body: data,
+                })
+                    .then(result => console.log(result))
+                    .catch(err => console.log(err))
             },
         }
     }

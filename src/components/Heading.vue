@@ -59,7 +59,7 @@
             routeChanged: Function,
             activeRoute: String,
             laserChanged: Function,
-            activeLaser: String,
+            activeLaser: Object,
         }
     }
 </script>

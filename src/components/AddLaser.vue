@@ -1,24 +1,58 @@
 <template>
     <div id="app">
         <form @submit.prevent="addLaser" id="add-laser">
-            <div class="field">
-                <div class="control has-icons-left has-icons-right">
-                    <input class="input" name="Name" placeholder="Naam" required>
-                    <span class="icon is-left"><i class="fa fa-gamepad"></i></span>
+
+            <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                    <label class="label">Naam</label>
+                </div>
+                <div class="field-body">
+                    <div class="field">
+                        <div class="control has-icons-left has-icons-right">
+                            <input class="input" name="Name" placeholder="MundiLaser" required>
+                            <span class="icon is-left"><i class="fa fa-gamepad"></i></span>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="field">
-                <div class="control has-icons-left has-icons-right">
-                    <input class="input" name="Ip" placeholder="IP-adres" required>
-                    <span class="icon is-left"><i class="fa fa-cloud"></i></span>
+
+            <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                    <label class="label">IP adres</label>
+                </div>
+                <div class="field-body">
+                    <div class="field is-horizontal">
+                        <div class="field-body control has-icons-left">
+                            <input class="input" name="Ip1" placeholder="10" type="number" required min="0" max="255">
+                            <span class="icon is-left"><i class="fa fa-cloud"></i></span>
+                        </div>
+                        <div class="field-body">
+                            <input type="number" class="input" name="Ip2" placeholder="0" required min="0" max="255">
+                        </div>
+                        <div class="field-body">
+                            <input type="number" class="input" name="Ip3" placeholder="195" required min="0" max="255">
+                        </div>
+                        <div class="field-body">
+                            <input type="number" class="input" name="Ip4" placeholder="10" required min="0" max="255">
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="field">
-                <div class="control has-icons-left has-icons-right">
-                    <input class="input" name="Port" type="number" placeholder="poort" required>
-                    <span class="icon is-left"><i class="fa fa-fort-awesome"></i></span>
+
+            <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                    <label class="label">Poort</label>
+                </div>
+                <div class="field-body">
+                    <div class="field">
+                        <div class="control has-icons-left has-icons-right">
+                            <input class="input" name="Port" type="number" placeholder="1470" required>
+                            <span class="icon is-left"><i class="fa fa-fort-awesome"></i></span>
+                        </div>
+                    </div>
                 </div>
             </div>
+
             <button class="button is-success is-pulled-right"
                     v-bind:class="{'is-loading': isLoading}">
                 Voeg laser toe
@@ -53,7 +87,7 @@
                 fetch("/laserclients", {
                     method: 'POST',
                     body: JSON.stringify({
-                        Ip: formData.get("Ip"),
+                        Ip: formData.get("Ip1") + "." + formData.get("Ip2") + "." + formData.get("Ip3") + "." + formData.get("Ip4"),
                         Port: parseInt(formData.get("Port")),
                         Name: formData.get("Name"),
                     })
