@@ -89,16 +89,9 @@
                 return this.laserclients.find(client => client.Name === this.activeLaser)
             },
             addLaser(laser) {
-                fetch("/laserclients", {
-                    method: 'POST',
-                    body: JSON.stringify(laser)
-                })
-                    .then(result => result.json())
-                    .then(result => {
-                        this.laserclients.push(result)
-                        this.activeRoute = 'manage-laser'
-                        this.activeLaser = result.Name
-                    })
+                this.activeLaser = laser.Name
+                this.laserclients.push(laser)
+                this.activeRoute = 'manage-laser'
             },
             removeLaser(laserName) {
                 this.laserclients = this.laserclients.filter(client => client.Name !== laserName)

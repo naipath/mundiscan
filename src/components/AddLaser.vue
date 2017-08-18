@@ -24,6 +24,13 @@
                 Voeg laser toe
             </button>
         </form>
+
+        <transition name="fade">
+            <div class="error-message notification is-danger" v-if="hasError">
+                <button class="delete" @click="resetError"></button>
+                Er kon geen connectie worden opgebouwd met de mundi laser. Controleer of de laser correct is aangesloten.
+            </div>
+        </transition>
     </div>
 </template>
 
@@ -35,19 +42,49 @@
         },
         data() {
             return {
-                isLoading: false
+                isLoading: false,
+                hasError: false,
             }
         },
         methods: {
             addLaser() {
                 this.isLoading = true
                 const formData = new FormData(document.getElementById('add-laser'))
-                this.handleLaser({
-                    Ip: formData.get("Ip"),
-                    Port: parseInt(formData.get("Port")),
-                    Name: formData.get("Name"),
+                fetch("/laserclients", {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        Ip: formData.get("Ip"),
+                        Port: parseInt(formData.get("Port")),
+                        Name: formData.get("Name"),
+                    })
                 })
+                    .then(response => {
+                        this.isLoading = false
+                        if (response.ok) {
+                            this.handleLaser(response.json())
+                        } else {
+                            this.hasError = true
+                        }
+                    })
+            },
+            resetError() {
+                this.hasError = false
             }
         },
     }
 </script>
+<style lang="scss">
+    .error-message {
+        position: absolute;
+        top: 0;
+        width: 100%;
+    }
+
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity .5s
+    }
+
+    .fade-enter, .fade-leave-to {
+        opacity: 0
+    }
+</style>
