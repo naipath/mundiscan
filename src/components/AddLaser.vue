@@ -28,7 +28,7 @@
         <transition name="fade">
             <div class="error-message notification is-danger" v-if="hasError">
                 <button class="delete" @click="resetError"></button>
-                Er kon geen connectie worden opgebouwd met de mundi laser. Controleer of de laser correct is aangesloten.
+                Er kan geen connectie worden opgebouwd met de mundi laser. Controleer of de laser correct is aangesloten.
             </div>
         </transition>
     </div>
@@ -61,7 +61,7 @@
                     .then(response => {
                         this.isLoading = false
                         if (response.ok) {
-                            this.handleLaser(response.json())
+                            response.json().then(result => this.handleLaser(result))
                         } else {
                             this.hasError = true
                         }

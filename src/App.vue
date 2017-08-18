@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <transition name="fade">
-            <Initializing v-if="initializing"/>
+            <Initializing v-if="initializing" :lasersRetrieved="initializeLaser"/>
 
             <div v-if="!initializing">
 
@@ -89,6 +89,7 @@
                 return this.laserclients.find(client => client.Name === this.activeLaser)
             },
             addLaser(laser) {
+                console.log(laser)
                 this.activeLaser = laser.Name
                 this.laserclients.push(laser)
                 this.activeRoute = 'manage-laser'
@@ -97,18 +98,15 @@
                 this.laserclients = this.laserclients.filter(client => client.Name !== laserName)
                 this.activeLaser = ''
                 this.activeRoute = 'add-laser'
+            },
+            initializeLaser(lasers) {
+                this.laserclients = lasers
+                if (this.laserclients.length > 0) {
+                    this.activeRoute = "manage-laser"
+                    this.activeLaser = this.laserclients[0].Name
+                }
+                setTimeout(() => this.initializing = false, 500)
             }
-        },
-        mounted: function () {
-            fetch("/laserclients")
-                .then(result => result.json())
-                .then(result => {
-                    this.laserclients = result
-                    if (this.laserclients.length > 0) {
-                        this.activeRoute = "manage-laser/" + this.laserclients[0].Name
-                    }
-                    setTimeout(() => this.initializing = false, 500)
-                })
         }
     }
 </script>
