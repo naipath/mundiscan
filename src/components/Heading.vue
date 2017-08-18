@@ -12,7 +12,7 @@
             </a>
         </div>
 
-        <div class="navbar-menu">
+        <div class="navbar-menu is-active">
 
             <div class="navbar-start">
                 <a class="navbar-item" v-for="route in routes"
