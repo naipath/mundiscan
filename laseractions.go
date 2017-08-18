@@ -202,7 +202,7 @@ func uploadLogoToLaser(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Fprintf(w, "%v", handler.Header)
 
-	fileName := *path + handler.Filename[:len(handler.Filename)-4] + ".bmp"
+	fileName := *path + "mundi.bmp"
 	convertErr := convertPngToBmp(file, fileName)
 	if convertErr != nil {
 		w.WriteHeader(500)

@@ -83,9 +83,8 @@
                 this.activeRoute = 'manage-laser'
             },
             addLaser(laser) {
-                this.activeLaser = laser
                 this.laserclients.push(laser)
-                this.activeRoute = 'manage-laser'
+                this.laserChanged(laser)
             },
             removeLaser(laser) {
                 this.laserclients = this.laserclients.filter(client => client.Id !== laser.Id)
@@ -95,8 +94,7 @@
             initializeLaser(lasers) {
                 this.laserclients = lasers
                 if (this.laserclients.length > 0) {
-                    this.activeRoute = "manage-laser"
-                    this.activeLaser = this.laserclients[0]
+                    this.laserChanged(this.laserclients[0])
                 }
                 setTimeout(() => this.initializing = false, 500)
             }
