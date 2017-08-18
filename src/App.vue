@@ -32,7 +32,7 @@
 
                     <RemoveLaser v-if="activeRoute === 'remove'" :removed="removeLaser" :laser="activeLaser"/>
 
-                    <ManageLaser v-if="activeRoute === 'manage-laser'" :laser="activeLaser"/>
+                    <UploadToLaser v-if="activeRoute === 'manage-laser'" :laser="activeLaser"/>
 
                     <Status v-if="activeRoute === 'status'" :laser="activeLaser"/>
 
@@ -47,7 +47,7 @@
 <script>
     import Heading from "./components/Heading.vue"
     import About from "./components/About.vue"
-    import ManageLaser from "./components/ManageLaser.vue"
+    import UploadToLaser from "./components/UploadToLaser.vue"
     import AddLaser from "./components/AddLaser.vue"
     import RemoveLaser from "./components/RemoveLaser.vue"
     import Initializing from "./components/Initializing.vue"
@@ -59,7 +59,7 @@
         components: {
             Heading,
             About,
-            ManageLaser,
+            UploadToLaser,
             AddLaser,
             RemoveLaser,
             Initializing,
@@ -96,7 +96,7 @@
                 this.laserclients = lasers
                 if (this.laserclients.length > 0) {
                     this.activeRoute = "manage-laser"
-                    this.activeLaser = this.laserclients[0].Id
+                    this.activeLaser = this.laserclients[0]
                 }
                 setTimeout(() => this.initializing = false, 500)
             }
