@@ -1,9 +1,12 @@
 # This file can be used to save the settings of the lasers at application startup
+# To use this functionality start the application with the -settings flag
 
 # Example:
 - name: Front
   ip: 127.0.0.1
   port: 1470
+  id: F31E2718-5C4E-59AB-6E7E-14CCC24DD14A
 - name: Back
   ip: 127.0.0.1
   port: 1471
+  id: F31E2718-5C4E-59AB-6E7E-14CCC24DD14B
