@@ -105,7 +105,7 @@
             }
         },
         methods: {
-            getSettings: function () {
+            getSettings() {
                 fetch('/laserclients/' + this.laser.Id + '/count')
                     .then(resp => resp.json())
                     .then(msg => this.counters = msg)
@@ -113,8 +113,8 @@
                     .then(resp => resp.json())
                     .then(msg => this.client = msg)
             },
-            resetCount: function () {
-                fetch('/laserclients/' + this.laser.Id + '/count', {method: "DELETE"})
+            resetCount() {
+                fetch(`/laserclients/${this.laser.Id}/count`, {method: "DELETE"})
                     .then(() => this.getSettings())
             },
         },

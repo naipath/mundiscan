@@ -60,12 +60,12 @@
             }
         },
         methods: {
-            addText: function () {
+            addText() {
                 this.noTextAdded = false;
                 const text = new fabric.IText('Typ hier text');
                 canvas.add(text);
             },
-            chooseImage: function (event) {
+            chooseImage(event) {
                 this.showFileChooser = false
                 if (window.File && window.FileReader && window.FileList && window.Blob) {
                     const file = event.target.files[0]
@@ -88,7 +88,7 @@
                     alert('The File APIs are not fully supported in this browser.');
                 }
             },
-            onFinished: function () {
+            onFinished() {
                 document.getElementById("download").href = canvas.toDataURL('image/jpeg');
                 document.getElementById("download").click();
 
