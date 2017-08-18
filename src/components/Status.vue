@@ -121,7 +121,7 @@
         },
         methods: {
             retrieveMundiStatus: function () {
-                fetch("/laserclients/" + this.laser.Name + "/status")
+                fetch("/laserclients/" + this.laser.Id + "/status")
                     .then(response => response.json())
                     .then(msg => {
                         this.statusMessage = msg.Message

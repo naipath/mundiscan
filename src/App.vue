@@ -22,7 +22,7 @@
                 <div class="container" v-if="laserclients.length > 0">
                     <Heading :activeRoute="activeRoute"
                              :routeChanged="routeChanged"
-                             :routes="laserclients.map(laser => laser.Name)"
+                             :routes="laserclients"
                              :laserChanged="laserChanged"
                              :activeLaser="activeLaser"/>
 
@@ -30,13 +30,13 @@
 
                     <AddLaser v-if="activeRoute === 'add-laser'" :handleLaser="addLaser"/>
 
-                    <RemoveLaser v-if="activeRoute === 'remove'" :removed="removeLaser" :laser="getActiveLaser()"/>
+                    <RemoveLaser v-if="activeRoute === 'remove'" :removed="removeLaser" :laser="activeLaser"/>
 
-                    <ManageLaser v-if="activeRoute === 'manage-laser'" :laser="getActiveLaser()"/>
+                    <ManageLaser v-if="activeRoute === 'manage-laser'" :laser="activeLaser"/>
 
-                    <Status v-if="activeRoute === 'status'" :laser="getActiveLaser()"/>
+                    <Status v-if="activeRoute === 'status'" :laser="activeLaser"/>
 
-                    <Settings v-if="activeRoute === 'settings'" :laser="getActiveLaser()"/>
+                    <Settings v-if="activeRoute === 'settings'" :laser="activeLaser"/>
 
                 </div>
             </div>
@@ -71,31 +71,24 @@
                 initializing: true,
                 laserclients: [],
                 activeRoute: '',
-                activeLaser: ''
+                activeLaser: {Id: '', Ip: '', Port: 0, Name: '-'}
             }
         },
         methods: {
-            routes() {
-                return this.laserclients.map(laser => laser.Name)
-            },
             routeChanged(route) {
                 this.activeRoute = route
             },
-            laserChanged(laserName) {
-                this.activeLaser = laserName
+            laserChanged(laser) {
+                this.activeLaser = laser
                 this.activeRoute = 'manage-laser'
             },
-            getActiveLaser() {
-                return this.laserclients.find(client => client.Name === this.activeLaser)
-            },
             addLaser(laser) {
-                console.log(laser)
-                this.activeLaser = laser.Name
+                this.activeLaser = laser
                 this.laserclients.push(laser)
                 this.activeRoute = 'manage-laser'
             },
-            removeLaser(laserName) {
-                this.laserclients = this.laserclients.filter(client => client.Name !== laserName)
+            removeLaser(laser) {
+                this.laserclients = this.laserclients.filter(client => client.Id !== laser.Id)
                 this.activeLaser = ''
                 this.activeRoute = 'add-laser'
             },
@@ -103,7 +96,7 @@
                 this.laserclients = lasers
                 if (this.laserclients.length > 0) {
                     this.activeRoute = "manage-laser"
-                    this.activeLaser = this.laserclients[0].Name
+                    this.activeLaser = this.laserclients[0].Id
                 }
                 setTimeout(() => this.initializing = false, 500)
             }

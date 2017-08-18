@@ -5,14 +5,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"github.com/go-chi/chi"
 	"io"
 	"image/png"
-	"github.com/nfnt/resize"
-	"golang.org/x/image/bmp"
-	"github.com/naipath/mundiclient"
 	"io/ioutil"
+	"crypto/rand"
 	"gopkg.in/yaml.v2"
+	"golang.org/x/image/bmp"
+	"github.com/go-chi/chi"
+	"github.com/nfnt/resize"
+	"github.com/naipath/mundiclient"
 )
 
 type LaserClient struct {
@@ -20,6 +21,7 @@ type LaserClient struct {
 	Name   string
 	Ip     string
 	Port   int
+	Id     string
 }
 
 var laserClients []LaserClient
@@ -35,13 +37,12 @@ type LaserStatusRequest struct {
 	Status  mundiclient.StatusData
 }
 
-
 func InitializeLaserClients(settingsFile string) {
 	if settingsFile == noSettings {
 		laserClients = make([]LaserClient, 0)
 	} else {
 		settingsData, readErr := ioutil.ReadFile(settingsFile)
-		if readErr !=  nil {
+		if readErr != nil {
 			panic(readErr)
 		}
 		err := yaml.Unmarshal(settingsData, &laserClients)
@@ -71,11 +72,10 @@ func SaveLaserClientsToDisk(settingsFile string) {
 	}
 }
 
-
 func getLaserClient(r *http.Request) LaserClient {
-	laserClientName := chi.URLParam(r, "laserClientName")
+	laserClientId := chi.URLParam(r, "laserClientId")
 	for index := range laserClients {
-		if laserClients[index].Name == laserClientName {
+		if laserClients[index].Id == laserClientId {
 			return laserClients[index]
 		}
 	}
@@ -120,7 +120,7 @@ func addLaserClient(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(500)
 		w.Write([]byte("{\"error\": \"Could not connect to Mundi laser\"}"))
 	} else {
-		newLaserClient := LaserClient{newClient, data.Name, data.Ip, data.Port}
+		newLaserClient := LaserClient{newClient, data.Name, data.Ip, data.Port, generateId()}
 		laserClients = append(laserClients, newLaserClient)
 
 		w.WriteHeader(201)
@@ -136,7 +136,7 @@ func deleteLaserClient(w http.ResponseWriter, r *http.Request) {
 
 	newClients := make([]LaserClient, 0)
 	for _, v := range laserClients {
-		if v.Name != client.Name {
+		if v.Id != client.Id {
 			newClients = append(newClients, v)
 		}
 	}
@@ -219,4 +219,11 @@ func uploadLogoToLaser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	file.Close()
+}
+
+
+func generateId() string {
+	b := make([]byte, 16)
+	rand.Read(b)
+	return fmt.Sprintf("%X-%X-%X-%X-%X", b[0:4], b[4:6], b[6:8], b[8:10], b[10:])
 }

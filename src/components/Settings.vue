@@ -11,6 +11,17 @@
 
         <div class="field is-horizontal">
             <div class="field-label is-normal">
+                <label class="label">Id</label>
+            </div>
+            <div class="field-body">
+                <div class="field">
+                    <input class="input" v-model="client.Id" readonly>
+                </div>
+            </div>
+        </div>
+
+        <div class="field is-horizontal">
+            <div class="field-label is-normal">
                 <label class="label">Name</label>
             </div>
             <div class="field-body">
@@ -95,15 +106,15 @@
         },
         methods: {
             getSettings: function () {
-                fetch('/laserclients/' + this.laser.Name + '/count')
+                fetch('/laserclients/' + this.laser.Id + '/count')
                     .then(resp => resp.json())
                     .then(msg => this.counters = msg)
-                fetch('/laserclients/' + this.laser.Name)
+                fetch('/laserclients/' + this.laser.Id)
                     .then(resp => resp.json())
                     .then(msg => this.client = msg)
             },
             resetCount: function () {
-                fetch('/laserclients/' + this.laser.Name + '/count', {method: "DELETE"})
+                fetch('/laserclients/' + this.laser.Id + '/count', {method: "DELETE"})
                     .then(() => this.getSettings())
             },
         },

@@ -66,7 +66,7 @@
 
                 const data = new FormData()
                 data.append('uploadfile', dataURItoBlob(canvas.toDataURL()), 'mundiscan-' + Date.now() + '.png')
-                fetch('/laserclients/'+ this.laser.Name + '/upload', {
+                fetch('/laserclients/'+ this.laser.Id + '/upload', {
                     method: 'POST',
                     body: data,
                 })

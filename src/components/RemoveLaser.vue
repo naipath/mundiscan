@@ -29,10 +29,10 @@
         methods: {
             removeLaser() {
                 this.isLoading = true
-                fetch("/laserclients/" + this.laser.Name, {method: "DELETE"})
+                fetch("/laserclients/" + this.laser.Id, {method: "DELETE"})
                     .then(() => {
                         this.isLoading = false
-                        this.removed(this.laser.Name)
+                        this.removed(this.laser)
                     })
             }
         }

@@ -29,7 +29,7 @@ func main() {
 		r.Get("/", getLaserClients)
 		r.Post("/", addLaserClient)
 
-		r.Route("/{laserClientName}", func(r chi.Router) {
+		r.Route("/{laserClientId}", func(r chi.Router) {
 			r.Get("/", retrieveLaserClient)
 			r.Delete("/", deleteLaserClient)
 			r.Get("/status", getLaserClientStatus)

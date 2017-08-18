@@ -18,7 +18,7 @@
                 <a class="navbar-item" v-for="route in routes"
                    href="#"
                    @click="laserChanged(route)"
-                   v-bind:class="{'is-active': activeLaser === route}">{{route}}</a>
+                   v-bind:class="{'is-active': activeLaser.Id === route.Id}">{{route.Name}}</a>
 
                 <a class="navbar-item"
                    v-bind:class="{'is-active': activeRoute === 'add-laser'}"
