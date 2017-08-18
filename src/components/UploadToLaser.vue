@@ -78,8 +78,6 @@
                         img.src = e.target.result;
                         img.onload = () => {
                             const imageSelected = new fabric.Image(img, {left: 0, top: 0, angle: 0});
-                            imageSelected.filters.push(new fabric.Image.filters.Grayscale());
-                            imageSelected.applyFilters(canvas.renderAll.bind(canvas));
                             canvas.add(imageSelected);
                         }
                     }
