@@ -1,14 +1,13 @@
 <template>
     <div id="app">
 
-        <div v-if="showFileChooser">
-            <div class="file is-centered">
-                <label class="file-label">
-                    <input class="file-input"
-                           type="file"
-                           accept="image/png,image/jpg,image/jpeg"
-                           v-on:change="chooseImage">
-                    <span class="file-cta">
+        <div class="file is-pulled-right is-success">
+            <label class="file-label">
+                <input class="file-input"
+                       type="file"
+                       accept="image/png,image/jpg,image/jpeg"
+                       v-on:change="chooseImage">
+                <span class="file-cta">
                       <span class="file-icon">
                         <i class="fa fa-upload"></i>
                       </span>
@@ -16,22 +15,10 @@
                         Kies een afbeelding ...
                       </span>
                     </span>
-                </label>
-            </div>
+            </label>
         </div>
 
-        <div class="columns" v-if="!showFileChooser">
-            <div class="column is-half">
-                <button v-if="noTextAdded" v-on:click="addText" class="button is-info">Text toevoegen</button>
-            </div>
-            <div class="column is-half">
-                <button class="button is-success is-pulled-right" v-on:click="onFinished">Klaar!</button>
-            </div>
-        </div>
-
-        <div class="column" v-if="!showFileChooser">
-            <canvas id="c" width="630" height="630"></canvas>
-        </div>
+        <div id="container"></div>
 
         <a id="download" href="#" download="printer.png" style="display: none;"></a>
 
@@ -41,7 +28,7 @@
 <script>
     import {dataURItoBlob} from "./../helpers";
 
-    let canvas;
+    let stage, layer, rect;
 
     export default {
         name: 'app',
@@ -49,65 +36,119 @@
             laser: Object
         },
         data() {
-            return {
-                showFileChooser: true,
-                noTextAdded: true,
-
-                routes: {
-                    laser: true,
-                    settings: false,
-                }
-            }
+            return {}
         },
         methods: {
-            addText() {
-                this.noTextAdded = false;
-                const text = new fabric.IText('Typ hier text');
-                canvas.add(text);
-            },
-            chooseImage(event) {
-                this.showFileChooser = false
+            chooseImage: function (event) {
                 if (window.File && window.FileReader && window.FileList && window.Blob) {
                     const file = event.target.files[0]
                     const fileReader = new FileReader()
-                    fileReader.onload = (e) => {
-                        canvas = new fabric.Canvas('c');
-                        canvas.selection = false;
-
-                        const img = new Image();
-                        img.src = e.target.result;
-                        img.onload = () => {
-                            const imageSelected = new fabric.Image(img, {left: 0, top: 0, angle: 0});
-                            canvas.add(imageSelected);
+                    fileReader.onload = e => {
+                        let imageObj = new Image()
+                        imageObj.onload = () => {
+                            this.addLogo(imageObj)
                         }
+                        imageObj.src = e.target.result
                     }
                     fileReader.readAsDataURL(file)
-                } else {
-                    alert('The File APIs are not fully supported in this browser.');
                 }
             },
-            onFinished() {
-                document.getElementById("download").href = canvas.toDataURL('image/jpeg');
-                document.getElementById("download").click();
-
-                const data = new FormData()
-                data.append('uploadfile', dataURItoBlob(canvas.toDataURL()), 'mundiscan-' + Date.now() + '.png')
-                fetch('/laserclients/'+ this.laser.Id + '/upload', {
-                    method: 'POST',
-                    body: data,
+            addLogo(imageObj) {
+                let logo = new Konva.Image({
+                    x: stage.getWidth() / 2,
+                    y: stage.getHeight() / 2,
+                    image: imageObj,
+                    draggable: true,
+                    stroke: 'blue',
+                    strokeWidth: 1,
+                    strokeEnabled: false
                 })
-                    .then(result => console.log(result))
-                    .catch(err => console.log(err))
+
+                logo.on('dblclick', () => {
+                    logo.destroy()
+                    layer.draw()
+                })
+
+                logo.on('mouseover', () => {
+                    logo.strokeEnabled(true)
+                    layer.draw()
+                })
+
+                logo.on('mouseout', () => {
+                    logo.strokeEnabled(false)
+                    layer.draw()
+                })
+
+                layer.add(logo)
+                logo.moveToBottom()
+                layer.draw()
             },
+            createBlurEffect(shape) {
+                const createRect = (x, y, width, height) => ({
+                    x,
+                    y,
+                    width,
+                    height,
+                    fill: 'rgba(255, 255, 255, 0.4)',
+                    listening: false,
+                })
+                layer.add(new Konva.Rect(createRect(
+                    0, 0,
+                    stage.getWidth(), stage.getHeight() / 2 - (shape / 2)
+                )))
+
+                layer.add(new Konva.Rect(createRect(
+                    stage.getWidth() / 2 + (shape / 2), stage.getHeight() / 2 - (shape / 2),
+                    stage.getWidth(), stage.getHeight()
+                )))
+
+                layer.add(new Konva.Rect(createRect(
+                    0, stage.getHeight() / 2 - (shape / 2),
+                    stage.getWidth() / 2 - (shape / 2), stage.getHeight() - (shape / 2)
+                )))
+
+                layer.add(new Konva.Rect(createRect(
+                    stage.getWidth() / 2 - (shape / 2), stage.getHeight() - (shape / 2),
+                    shape, stage.getHeight() - (shape / 2)
+                )))
+            },
+            createPinHole(shape) {
+                rect = new Konva.Rect({
+                    x: stage.getWidth() / 2 - (shape / 2),
+                    y: stage.getHeight() / 2 - (shape / 2),
+                    width: shape,
+                    height: shape,
+                    fill: 'transparent',
+                    stroke: 'black',
+                    strokeWidth: 1,
+                    listening: false,
+                })
+                layer.add(rect)
+            }
+        },
+        mounted() {
+            stage = new Konva.Stage({
+                container: 'container',
+                width: document.getElementById("container").offsetWidth,
+                height: document.getElementById("container").offsetHeight
+            })
+            layer = new Konva.Layer()
+
+            const laserWidth = 420
+            this.createPinHole(laserWidth)
+            this.createBlurEffect(laserWidth)
+
+            stage.add(layer)
         }
     }
 </script>
 <style lang="scss">
-    #c {
-        border: 1px solid black;
+    #container {
+        width: 100%;
+        height: calc(100vh - 105px);
     }
 
-    .canvas-container {
-        margin: 0 auto;
+    .file.is-pulled-right.is-success {
+        z-index: 10;
     }
 </style>
