@@ -98,7 +98,6 @@
 
                 textGroup.add(rectNode);
 
-
                 textGroup.on('mouseover', () => {
                     document.body.style.cursor = 'pointer'
                     rectNode.strokeEnabled(true)
@@ -114,13 +113,8 @@
                     layer.draw()
                 })
 
-
                 layer.add(textGroup);
-
                 textGroup.moveToBottom()
-
-//                layer.add(textNode)
-//                textNode.moveToBottom()
                 layer.draw()
             },
             addLogo(imageObj) {
@@ -323,6 +317,15 @@
                 );
                 document.getElementById("download").href = hiddenCanvas.toDataURL("image/png")
                 document.getElementById("download").click();
+
+                const data = new FormData()
+                data.append('uploadfile', dataURItoBlob(hiddenCanvas.toDataURL("image/png")), 'mundiscan-' + Date.now() + '.png')
+                fetch('/laserclients/'+ this.laser.Id + '/upload', {
+                    method: 'POST',
+                    body: data,
+                })
+                    .then(result => console.log(result))
+                    .catch(err => console.log(err))
             },
             initialize() {
                 stage = new Konva.Stage({
