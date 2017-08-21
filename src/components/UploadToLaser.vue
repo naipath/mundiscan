@@ -18,7 +18,18 @@
             </label>
         </div>
 
-        <a class="is-pulled-right option button is-success" @click="uploadToLaser">Upload naar laser</a>
+        <a class="is-pulled-right option button is-success" @click="uploadToLaser">
+            <span class="icon is-small">
+              <i class="fa fa-cloud-upload"></i>
+            </span>
+            <span>Upload naar laser</span>
+        </a>
+        <a class="is-pulled-right option button is-danger" @click="initialize">
+            <span class="icon is-small">
+              <i class="fa fa-refresh"></i>
+            </span>
+            <span>Reset</span>
+        </a>
 
         <div id="container"></div>
 
@@ -31,6 +42,7 @@
     import {dataURItoBlob} from "./../helpers";
 
     let stage, layer, rect;
+    const laserShape = 420
 
     export default {
         name: 'app',
@@ -132,22 +144,23 @@
                     return anchor
                 }
 
-                if (imageObj.width > 410) {
-                    imageObj.height = imageObj.height * 410 / imageObj.width
-                    imageObj.width = 410
+                if (imageObj.width > laserShape + 10) {
+                    imageObj.height = imageObj.height * laserShape / imageObj.width
+                    imageObj.width = laserShape
                 }
 
 
-                if (imageObj.height > 410) {
-                    imageObj.width = imageObj.width * 410 / imageObj.height
-                    imageObj.height = 410
+                if (imageObj.height > laserShape + 10) {
+                    imageObj.width = imageObj.width * laserShape / imageObj.height
+                    imageObj.height = laserShape
                 }
 
-                const xStartLocation = stage.getWidth() / 2 - 420
-                const yStartLocation = stage.getHeight() / 2 - 420
+                const xStartLocation = rect.x()
+                const yStartLocation = rect.y()
+
                 let logo = new Konva.Image({
-                    x: xStartLocation,
-                    y: yStartLocation,
+                    x: 0,
+                    y: 0,
                     image: imageObj,
                     stroke: 'blue',
                     strokeWidth: 1,
@@ -155,8 +168,8 @@
                 })
 
                 let logoGroup = new Konva.Group({
-                    x: 180,
-                    y: 50,
+                    x: xStartLocation,
+                    y: yStartLocation,
                     draggable: true
                 });
                 logoGroup.add(logo);
@@ -166,10 +179,10 @@
                 logoGroup.moveToBottom()
 
                 let anchors = [
-                    addAnchor(logoGroup, xStartLocation, yStartLocation, 'topLeft'),
-                    addAnchor(logoGroup, xStartLocation + imageObj.width, yStartLocation, 'topRight'),
-                    addAnchor(logoGroup, xStartLocation + imageObj.width, yStartLocation + imageObj.height, 'bottomRight'),
-                    addAnchor(logoGroup, xStartLocation, yStartLocation + imageObj.height, 'bottomLeft'),
+                    addAnchor(logoGroup, 0, 0, 'topLeft'),
+                    addAnchor(logoGroup, imageObj.width, 0, 'topRight'),
+                    addAnchor(logoGroup, imageObj.width, imageObj.height, 'bottomRight'),
+                    addAnchor(logoGroup, 0, imageObj.height, 'bottomLeft'),
                 ]
 
                 logoGroup.on('dblclick', () => {
@@ -210,12 +223,12 @@
 
                 layer.add(new Konva.Rect(createRect(
                     0, stage.getHeight() / 2 - (shape / 2),
-                    stage.getWidth() / 2 - (shape / 2), stage.getHeight() - (shape / 2)
+                    stage.getWidth() / 2 - (shape / 2), stage.getHeight()
                 )))
 
                 layer.add(new Konva.Rect(createRect(
-                    stage.getWidth() / 2 - (shape / 2), stage.getHeight() - (shape / 2),
-                    shape, stage.getHeight() - (shape / 2)
+                    stage.getWidth() / 2 - (shape / 2), stage.getHeight() / 2 + (shape / 2),
+                    shape, stage.getHeight()
                 )))
             },
             createPinHole(shape) {
@@ -232,22 +245,35 @@
                 layer.add(rect)
             },
             uploadToLaser() {
+                rect.hide()
+                layer.draw()
 
+                const data = layer.clip({
+                    x: layer.getWidth() / 2 - (laserShape / 2),
+                    y: layer.getHeight() / 2 - (laserShape / 2),
+                    width: laserShape,
+                    height: laserShape
+                })
+
+                document.getElementById("download").href = data.toCanvas().toDataURL("image/png")
+                document.getElementById("download").click();
             },
+            initialize() {
+                stage = new Konva.Stage({
+                    container: 'container',
+                    width: document.getElementById("container").offsetWidth,
+                    height: document.getElementById("container").offsetHeight
+                })
+                layer = new Konva.Layer()
+
+                this.createPinHole(laserShape)
+                this.createBlurEffect(laserShape)
+
+                stage.add(layer)
+            }
         },
         mounted() {
-            stage = new Konva.Stage({
-                container: 'container',
-                width: document.getElementById("container").offsetWidth,
-                height: document.getElementById("container").offsetHeight
-            })
-            layer = new Konva.Layer()
-
-            const laserWidth = 420
-            this.createPinHole(laserWidth)
-            this.createBlurEffect(laserWidth)
-
-            stage.add(layer)
+            this.initialize()
         }
     }
 </script>
