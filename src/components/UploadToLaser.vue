@@ -233,10 +233,10 @@
             },
             createPinHole(shape) {
                 rect = new Konva.Rect({
-                    x: stage.getWidth() / 2 - (shape / 2),
-                    y: stage.getHeight() / 2 - (shape / 2),
-                    width: shape,
-                    height: shape,
+                    x: stage.getWidth() / 2 - (shape / 2) - 1,
+                    y: stage.getHeight() / 2 - (shape / 2) - 1,
+                    width: shape + 2,
+                    height: shape + 2,
                     fill: 'transparent',
                     stroke: 'black',
                     strokeWidth: 1,
@@ -245,17 +245,27 @@
                 layer.add(rect)
             },
             uploadToLaser() {
-                rect.hide()
-                layer.draw()
-
-                const data = layer.clip({
-                    x: layer.getWidth() / 2 - (laserShape / 2),
-                    y: layer.getHeight() / 2 - (laserShape / 2),
-                    width: laserShape,
-                    height: laserShape
+                const croppedStage = stage.toCanvas({
+                    width: stage.getWidth(),
+                    height: stage.getHeight(),
                 })
 
-                document.getElementById("download").href = data.toCanvas().toDataURL("image/png")
+                let hiddenCanvas = document.createElement('canvas');
+                hiddenCanvas.style.display = 'none';
+                document.body.appendChild(hiddenCanvas);
+                hiddenCanvas.width = stage.getWidth();
+                hiddenCanvas.height = stage.getHeight();
+
+                let hiddenContext = hiddenCanvas.getContext('2d');
+                hiddenContext.drawImage(
+                    croppedStage,
+                    stage.getWidth() / 2 - laserShape / 2,
+                    stage.getHeight() / 2 - laserShape / 2,
+                    laserShape, laserShape,
+                    0, 0,
+                    hiddenCanvas.width, hiddenCanvas.height
+                );
+                document.getElementById("download").href = hiddenCanvas.toDataURL("image/png")
                 document.getElementById("download").click();
             },
             initialize() {
