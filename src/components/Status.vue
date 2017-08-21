@@ -1,5 +1,5 @@
 <template>
-    <div id="app">
+    <div id="app" class="section">
 
         <div class="columns">
             <h1 class="title column">Status</h1>

@@ -1,5 +1,5 @@
 <template>
-    <section id="app" class="hero">
+    <section id="app" class="hero section">
         <div class="hero-body">
             <h1 class="subtitle">
                 Weet je zeker dat je {{laser.Name}} wilt verwijderen?

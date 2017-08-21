@@ -66,7 +66,6 @@
 <style lang="scss">
     .navbar {
         border-bottom: 1px solid #eee;
-        margin-bottom: 50px;
     }
 
     .navbar-item.is-active {

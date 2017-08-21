@@ -1,5 +1,5 @@
 <template>
-    <div id="settings">
+    <div id="settings" class="section">
 
         <div class="columns">
             <h1 class="title column">Laser client</h1>

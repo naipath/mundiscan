@@ -19,7 +19,7 @@
                     </section>
                 </div>
 
-                <div class="container" v-if="laserclients.length > 0">
+                <div v-if="laserclients.length > 0">
                     <Heading :activeRoute="activeRoute"
                              :routeChanged="routeChanged"
                              :routes="laserclients"

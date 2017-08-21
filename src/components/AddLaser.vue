@@ -1,5 +1,5 @@
 <template>
-    <div id="app">
+    <div id="app" class="section">
         <form @submit.prevent="addLaser" id="add-laser">
 
             <div class="field is-horizontal">

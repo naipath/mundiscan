@@ -1,7 +1,7 @@
 {
   "laserclients": [
     {
-      "Name": "testing",
+      "Name": "Testing",
       "Ip": "10.10.10.10",
       "Port": 1470,
       "Id": "F31E2718-5C4E-59AB-6E7E-14CCC24DD14A"

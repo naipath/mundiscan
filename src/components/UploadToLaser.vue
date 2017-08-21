@@ -1,7 +1,7 @@
 <template>
     <div id="app">
 
-        <nav class="panel" style="position: absolute; z-index: 10000; right: 0;">
+        <nav class="panel" style="position: absolute; z-index: 10000; right: 20px; background: white; top: 70px">
             <p class="panel-heading">
                 Acties
             </p>
@@ -71,31 +71,59 @@
                 }
             },
             addText() {
-                const newText = new Konva.Text({
-                    x: rect.x(),
-                    y: rect.y(),
+                const textNode = new Konva.Text({
+                    x: 0,
+                    y: 0,
                     fontSize: 30,
                     text: "testing...",
+                })
+
+                let textGroup = new Konva.Group({
+                    x: rect.x(),
+                    y: rect.y(),
                     draggable: true,
+
+                });
+                textGroup.add(textNode);
+
+                let rectNode = new Konva.Rect({
+                    x: 0,
+                    y: 0,
+                    width: textNode.getWidth(),
+                    height: textNode.getHeight(),
+                    strokeEnabled: false,
+                    stroke: 'blue',
+                    strokeWidth: 1,
                 })
-                newText.on('mouseover', () => {
+
+                textGroup.add(rectNode);
+
+
+                textGroup.on('mouseover', () => {
                     document.body.style.cursor = 'pointer'
+                    rectNode.strokeEnabled(true)
                     layer.draw()
                 })
-                newText.on('mouseout', () => {
+                textGroup.on('mouseout', () => {
                     document.body.style.cursor = 'default'
+                    rectNode.strokeEnabled(false)
                     layer.draw()
                 })
-                newText.on('dblclick', () => {
-                    newText.destroy()
+                textGroup.on('dblclick', () => {
+                    textGroup.destroy()
                     layer.draw()
                 })
-                layer.add(newText)
-                newText.moveToBottom()
+
+
+                layer.add(textGroup);
+
+                textGroup.moveToBottom()
+
+//                layer.add(textNode)
+//                textNode.moveToBottom()
                 layer.draw()
             },
             addLogo(imageObj) {
-
                 const update = activeAnchor => {
                     let group = activeAnchor.getParent();
                     let topLeft = group.get('.topLeft')[0];
@@ -204,7 +232,6 @@
                 logoGroup.add(logo);
                 layer.add(logoGroup);
 
-                logo.moveToBottom()
                 logoGroup.moveToBottom()
 
                 let anchors = [
