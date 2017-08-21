@@ -1,35 +1,40 @@
 <template>
     <div id="app">
 
-        <div class="file is-pulled-right is-success option">
-            <label class="file-label">
+        <nav class="panel" style="position: absolute; z-index: 10000; right: 0;">
+            <p class="panel-heading">
+                Acties
+            </p>
+            <a class="panel-block" @click="addText">
+                <span class="panel-icon">
+                  <i class="fa fa-font"></i>
+                </span>
+                Tekst
+            </a>
+            <a class="panel-block" @click="initialize">
+                <span class="panel-icon">
+                  <i class="fa fa-refresh"></i>
+                </span>
+                Reset
+            </a>
+            <label class="panel-block file-label">
                 <input class="file-input"
                        type="file"
                        accept="image/png,image/jpg,image/jpeg"
                        v-on:change="chooseImage">
-                <span class="file-cta">
-                      <span class="file-icon">
-                        <i class="fa fa-upload"></i>
-                      </span>
-                      <span class="file-label">
-                        Kies een afbeelding ...
-                      </span>
-                    </span>
-            </label>
-        </div>
 
-        <a class="is-pulled-right option button is-success" @click="uploadToLaser">
-            <span class="icon is-small">
-              <i class="fa fa-cloud-upload"></i>
-            </span>
-            <span>Upload naar laser</span>
-        </a>
-        <a class="is-pulled-right option button is-danger" @click="initialize">
-            <span class="icon is-small">
-              <i class="fa fa-refresh"></i>
-            </span>
-            <span>Reset</span>
-        </a>
+                <span class="panel-icon">
+                    <i class="fa fa-upload"></i>
+                </span>
+                Afbeelding
+            </label>
+            <a class="panel-block" @click="uploadToLaser">
+                <span class="panel-icon">
+                  <i class="fa fa-cloud-upload"></i>
+                </span>
+                Upload
+            </a>
+        </nav>
 
         <div id="container"></div>
 
@@ -64,6 +69,30 @@
                     }
                     fileReader.readAsDataURL(file)
                 }
+            },
+            addText() {
+                const newText = new Konva.Text({
+                    x: rect.x(),
+                    y: rect.y(),
+                    fontSize: 30,
+                    text: "testing...",
+                    draggable: true,
+                })
+                newText.on('mouseover', () => {
+                    document.body.style.cursor = 'pointer'
+                    layer.draw()
+                })
+                newText.on('mouseout', () => {
+                    document.body.style.cursor = 'default'
+                    layer.draw()
+                })
+                newText.on('dblclick', () => {
+                    newText.destroy()
+                    layer.draw()
+                })
+                layer.add(newText)
+                newText.moveToBottom()
+                layer.draw()
             },
             addLogo(imageObj) {
 
