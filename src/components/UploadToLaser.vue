@@ -46,7 +46,7 @@
 <script>
     import {dataURItoBlob} from "./../helpers";
 
-    let stage, layer, rect;
+    let stage, layer, rect, backgroundRect;
     const laserShape = 420
 
     export default {
@@ -113,50 +113,51 @@
                     layer.draw()
                 })
 
-                layer.add(textGroup);
+                layer.add(textGroup)
                 textGroup.moveToBottom()
+                backgroundRect.moveToBottom()
                 layer.draw()
             },
             addLogo(imageObj) {
                 const update = activeAnchor => {
-                    let group = activeAnchor.getParent();
-                    let topLeft = group.get('.topLeft')[0];
-                    let topRight = group.get('.topRight')[0];
-                    let bottomRight = group.get('.bottomRight')[0];
-                    let bottomLeft = group.get('.bottomLeft')[0];
-                    let image = group.get('Image')[0];
-                    let anchorX = activeAnchor.getX();
-                    let anchorY = activeAnchor.getY();
+                    let group = activeAnchor.getParent()
+                    let topLeft = group.get('.topLeft')[0]
+                    let topRight = group.get('.topRight')[0]
+                    let bottomRight = group.get('.bottomRight')[0]
+                    let bottomLeft = group.get('.bottomLeft')[0]
+                    let image = group.get('Image')[0]
+                    let anchorX = activeAnchor.getX()
+                    let anchorY = activeAnchor.getY()
                     // update anchor positions
                     switch (activeAnchor.getName()) {
                         case 'topLeft':
-                            topRight.setY(anchorY);
-                            bottomLeft.setX(anchorX);
-                            break;
+                            topRight.setY(anchorY)
+                            bottomLeft.setX(anchorX)
+                            break
                         case 'topRight':
-                            topLeft.setY(anchorY);
-                            bottomRight.setX(anchorX);
-                            break;
+                            topLeft.setY(anchorY)
+                            bottomRight.setX(anchorX)
+                            break
                         case 'bottomRight':
-                            bottomLeft.setY(anchorY);
-                            topRight.setX(anchorX);
-                            break;
+                            bottomLeft.setY(anchorY)
+                            topRight.setX(anchorX)
+                            break
                         case 'bottomLeft':
-                            bottomRight.setY(anchorY);
-                            topLeft.setX(anchorX);
-                            break;
+                            bottomRight.setY(anchorY)
+                            topLeft.setX(anchorX)
+                            break
                     }
-                    image.position(topLeft.position());
-                    let width = topRight.getX() - topLeft.getX();
-                    let height = bottomLeft.getY() - topLeft.getY();
+                    image.position(topLeft.position())
+                    let width = topRight.getX() - topLeft.getX()
+                    let height = bottomLeft.getY() - topLeft.getY()
                     if (width && height) {
-                        image.width(width);
-                        image.height(height);
+                        image.width(width)
+                        image.height(height)
                     }
                 }
 
                 const addAnchor = (group, x, y, name) => {
-                    let layer = group.getLayer();
+                    let layer = group.getLayer()
                     let anchor = new Konva.Circle({
                         x, y,
                         stroke: '#666',
@@ -167,7 +168,7 @@
                         visible: false,
                         draggable: true,
                         dragOnTop: false
-                    });
+                    })
                     anchor.on('dragmove', () => {
                         update(anchor)
                         layer.draw()
@@ -222,11 +223,12 @@
                     x: xStartLocation,
                     y: yStartLocation,
                     draggable: true
-                });
-                logoGroup.add(logo);
-                layer.add(logoGroup);
+                })
+                logoGroup.add(logo)
+                layer.add(logoGroup)
 
                 logoGroup.moveToBottom()
+                backgroundRect.moveToBottom()
 
                 let anchors = [
                     addAnchor(logoGroup, 0, 0, 'topLeft'),
@@ -293,6 +295,19 @@
                     listening: false,
                 })
                 layer.add(rect)
+
+                backgroundRect = new Konva.Rect({
+                    x: stage.getWidth() / 2 - (shape / 2) - 1,
+                    y: stage.getHeight() / 2 - (shape / 2) - 1,
+                    width: shape + 2,
+                    height: shape + 2,
+                    fill: 'white',
+                    strokeEnabled: 'false',
+                    listening: false,
+                })
+
+                layer.add(backgroundRect)
+                backgroundRect.moveToBottom()
             },
             uploadToLaser() {
                 const croppedStage = stage.toCanvas({
@@ -300,13 +315,13 @@
                     height: stage.getHeight(),
                 })
 
-                let hiddenCanvas = document.createElement('canvas');
-                hiddenCanvas.style.display = 'none';
-                document.body.appendChild(hiddenCanvas);
-                hiddenCanvas.width = stage.getWidth();
-                hiddenCanvas.height = stage.getHeight();
+                let hiddenCanvas = document.createElement('canvas')
+                hiddenCanvas.style.display = 'none'
+                document.body.appendChild(hiddenCanvas)
+                hiddenCanvas.width = stage.getWidth()
+                hiddenCanvas.height = stage.getHeight()
 
-                let hiddenContext = hiddenCanvas.getContext('2d');
+                let hiddenContext = hiddenCanvas.getContext('2d')
                 hiddenContext.drawImage(
                     croppedStage,
                     stage.getWidth() / 2 - laserShape / 2,
@@ -314,9 +329,9 @@
                     laserShape, laserShape,
                     0, 0,
                     hiddenCanvas.width, hiddenCanvas.height
-                );
+                )
                 document.getElementById("download").href = hiddenCanvas.toDataURL("image/png")
-                document.getElementById("download").click();
+                document.getElementById("download").click()
 
                 const data = new FormData()
                 data.append('uploadfile', dataURItoBlob(hiddenCanvas.toDataURL("image/png")), 'mundiscan-' + Date.now() + '.png')
