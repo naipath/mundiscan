@@ -17,6 +17,12 @@
                 </span>
                 Reset
             </a>
+            <a class="panel-block" @click="initialize">
+                <span class="panel-icon">
+                  <i class="fa fa-barcode"></i>
+                </span>
+                Parameters
+            </a>
             <label class="panel-block file-label">
                 <input class="file-input"
                        type="file"
@@ -24,7 +30,7 @@
                        v-on:change="chooseImage">
 
                 <span class="panel-icon">
-                    <i class="fa fa-upload"></i>
+                    <i class="fa fa-image"></i>
                 </span>
                 Afbeelding
             </label>
