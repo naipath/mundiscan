@@ -6,8 +6,7 @@
                v-bind:class="{'is-active': activeRoute === 'about'}"
                href="#"
                @click="routeChanged('about')">
-                <img src="https://www.mundi-technology.nl/files/_thumbnail/2/logo_1500x1500.png"
-                     width="112"
+                <img src="../assets/mundi-logo-small.png"
                      height="28">
             </a>
         </div>
