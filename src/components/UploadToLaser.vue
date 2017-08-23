@@ -11,18 +11,6 @@
                 </span>
                 Tekst
             </a>
-            <a class="panel-block" @click="initialize">
-                <span class="panel-icon">
-                  <i class="fa fa-refresh"></i>
-                </span>
-                Reset
-            </a>
-            <a class="panel-block" @click="initialize">
-                <span class="panel-icon">
-                  <i class="fa fa-barcode"></i>
-                </span>
-                Parameters
-            </a>
             <label class="panel-block file-label">
                 <input class="file-input"
                        type="file"
@@ -34,12 +22,23 @@
                 </span>
                 Afbeelding
             </label>
-            <a class="panel-block" @click="uploadToLaser">
+            <a class="panel-block" @click="initialize">
                 <span class="panel-icon">
-                  <i class="fa fa-cloud-upload"></i>
+                  <i class="fa fa-barcode"></i>
                 </span>
-                Upload
+                Parameters
             </a>
+            <a class="panel-block" @click="initialize">
+                <span class="panel-icon">
+                  <i class="fa fa-refresh"></i>
+                </span>
+                Reset
+            </a>
+            <div class="panel-block">
+                <button class="button is-success is-outlined is-fullwidth" @click="uploadToLaser">
+                    Upload
+                </button>
+            </div>
         </nav>
 
         <div id="container"></div>
@@ -53,6 +52,7 @@
     import {dataURItoBlob} from "./../helpers";
 
     let stage, layer, rect, backgroundRect;
+    let rasterLines = []
     const laserShape = 420
 
     export default {
@@ -315,7 +315,45 @@
                 layer.add(backgroundRect)
                 backgroundRect.moveToBottom()
             },
+            createRaster(shape) {
+                Array.from(Array(9).keys())
+                    .forEach(i => {
+                        let verticalRasterLine = new Konva.Line({
+                            points: [
+                                stage.getWidth() / 2 - (shape / 2) + (i + 1) * (shape / 10),
+                                stage.getHeight() / 2 - (shape / 2),
+
+                                stage.getWidth() / 2 - (shape / 2) + (i + 1) * (shape / 10),
+                                stage.getHeight() / 2 - (shape / 2) + shape
+                            ],
+                            stroke: 'rgba(140, 140, 140, 0.4)',
+                            strokeWidth: 1,
+                            listening: false,
+                        })
+                        layer.add(verticalRasterLine)
+                        rasterLines.push(verticalRasterLine)
+
+                        let horizontalRasterLine = new Konva.Line({
+                            points: [
+                                stage.getWidth() / 2 - (shape / 2),
+                                stage.getHeight() / 2 - (shape / 2) + (i + 1) * (shape / 10),
+
+                                stage.getWidth() / 2 - (shape / 2) + shape,
+                                stage.getHeight() / 2 - (shape / 2) + (i + 1) * (shape / 10)
+                            ],
+                            stroke: 'rgba(140, 140, 140, 0.4)',
+                            strokeWidth: 1,
+                            listening: false,
+                        })
+                        layer.add(horizontalRasterLine)
+                        rasterLines.push(horizontalRasterLine)
+                    })
+
+            },
             uploadToLaser() {
+                rasterLines.forEach(line => line.hide())
+                layer.draw()
+
                 const croppedStage = stage.toCanvas({
                     width: stage.getWidth(),
                     height: stage.getHeight(),
@@ -324,8 +362,8 @@
                 let hiddenCanvas = document.createElement('canvas')
                 hiddenCanvas.style.display = 'none'
                 document.body.appendChild(hiddenCanvas)
-                hiddenCanvas.width = stage.getWidth()
-                hiddenCanvas.height = stage.getHeight()
+                hiddenCanvas.width = laserShape
+                hiddenCanvas.height = laserShape
 
                 let hiddenContext = hiddenCanvas.getContext('2d')
                 hiddenContext.drawImage(
@@ -341,12 +379,15 @@
 
                 const data = new FormData()
                 data.append('uploadfile', dataURItoBlob(hiddenCanvas.toDataURL("image/png")), 'mundiscan-' + Date.now() + '.png')
-                fetch('/laserclients/'+ this.laser.Id + '/upload', {
+                fetch('/laserclients/' + this.laser.Id + '/upload', {
                     method: 'POST',
                     body: data,
                 })
                     .then(result => console.log(result))
                     .catch(err => console.log(err))
+
+                rasterLines.forEach(line => line.show())
+                layer.draw()
             },
             initialize() {
                 stage = new Konva.Stage({
@@ -358,6 +399,7 @@
 
                 this.createPinHole(laserShape)
                 this.createBlurEffect(laserShape)
+                this.createRaster(laserShape)
 
                 stage.add(layer)
             }
