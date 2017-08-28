@@ -148,6 +148,23 @@
             </div>
         </div>
 
+        <div class="modal" v-bind:class="{'is-active': isUploading || uploadError}">
+            <div class="modal-background"></div>
+            <div class="modal-content hero is-light has-text-centered">
+                <div class="hero-body">
+                    <h1 class="title">Uploaden</h1>
+                    <h1 class="title button is-light is-loading" v-if="!uploadError"></h1>
+
+                    <div class="error-message notification is-danger" v-if="uploadError">
+                        Er is iets misgegaan bij het uploaden naar de laser
+                        <br/>
+                        <button class="button" @click="uploadToLaser">Opnieuw proberen</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
     </div>
 </template>
 
@@ -169,6 +186,8 @@ export default {
             textInput: null,
             textSize: 30,
             showLaserParameters: false,
+            isUploading: false,
+            uploadError: true,
         }
     },
     methods: {
@@ -460,6 +479,8 @@ export default {
 
         },
         uploadToLaser() {
+            this.uploadError = false
+            this.isUploading = true
             rasterLines.forEach(line => line.hide())
             layer.draw()
 
@@ -492,8 +513,16 @@ export default {
                 method: 'POST',
                 body: data,
             })
-                .then(result => console.log(result))
-                .catch(err => console.log(err))
+                .then(result => {
+                    if (result.ok) {
+                        this.isUploading = false
+                        this.uploadError = false
+                    } else {
+                        this.uploadError = true
+                        this.isUploading = false
+
+                    }
+                })
 
             rasterLines.forEach(line => line.show())
             layer.draw()
