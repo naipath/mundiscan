@@ -252,6 +252,9 @@ export default {
             textGroup.moveToBottom()
             backgroundRect.moveToBottom()
             layer.draw()
+
+            this.textInput = ""
+            this.textSize = 30
         },
         addLogo(imageObj) {
             const update = activeAnchor => {
