@@ -158,6 +158,7 @@
                     <div class="error-message notification is-danger" v-if="uploadError">
                         Er is iets misgegaan bij het uploaden naar de laser
                         <br/>
+                        <br/>
                         <button class="button" @click="uploadToLaser">Opnieuw proberen</button>
                     </div>
 
@@ -187,7 +188,7 @@ export default {
             textSize: 30,
             showLaserParameters: false,
             isUploading: false,
-            uploadError: true,
+            uploadError: false,
         }
     },
     methods: {
