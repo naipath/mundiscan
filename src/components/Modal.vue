@@ -1,6 +1,6 @@
 <template>
-    <transition id="app">
-        <div class="modal" v-bind:class="{'is-active': isActive}">
+    <transition id="app" name="fade">
+        <div class="modal is-active" v-if="isActive">
             <div class="modal-background"></div>
             <div class="modal-content">
                 <slot></slot>
