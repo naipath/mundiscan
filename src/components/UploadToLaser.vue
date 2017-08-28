@@ -72,7 +72,8 @@
             </div>
         </Modal>
 
-        <ChangeLaserParameter :is-active="showLaserParameters" :on-close="closeLaserParameters" />
+        <ChangeLaserParameter :is-active="showLaserParameters" :on-close="closeLaserParameters"
+        />
 
         <Modal :is-active="isUploading || uploadError">
             <section class="hero is-light has-text-centered">
@@ -483,7 +484,7 @@ export default {
     }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 #container {
     width: 100%;
     height: calc(100vh - 105px);

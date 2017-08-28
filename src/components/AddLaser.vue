@@ -34,7 +34,8 @@
                             <input type="number" class="input" name="Ip2" placeholder="0" required min="0" max="255">
                         </div>
                         <div class="field-body">
-                            <input type="number" class="input" name="Ip3" placeholder="195" required min="0" max="255">
+                            <input type="number" class="input" name="Ip3" placeholder="195" required min="0"
+                                max="255">
                         </div>
                         <div class="field-body">
                             <input type="number" class="input" name="Ip4" placeholder="10" required min="0" max="255">
@@ -65,9 +66,10 @@
         </form>
 
         <transition name="fade">
-            <div class="error-message custom-message notification is-danger" v-if="hasError">
+            <div class="error-message notification is-danger" v-if="hasError">
                 <button class="delete" @click="resetError"></button>
-                Er kan geen connectie worden opgebouwd met de mundi laser. Controleer of de laser correct is aangesloten.
+                Er kan geen connectie worden opgebouwd met de mundi laser. Controleer of de laser
+                correct is aangesloten.
             </div>
         </transition>
     </div>
@@ -112,8 +114,8 @@ export default {
     },
 }
 </script>
-<style lang="scss">
-.custom-message {
+<style lang="scss" scoped>
+.error-message {
     position: absolute !important;
     top: 0!important;
     width: 100% !important;

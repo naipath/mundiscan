@@ -7,8 +7,9 @@
                     <h1 class="title button is-light is-loading"></h1>
                 </div>
                 <transition name="fade">
-                    <div class="error-message custom-message notification is-danger" v-if="hasError">
-                        <div>Er is iets misgegaan bij het opstarten van de applicatie. Probeer het later nogmaals.</div>
+                    <div class="error-message notification is-danger" v-if="hasError">
+                        <div>Er is iets misgegaan bij het opstarten van de applicatie. Probeer
+                            het later nogmaals.</div>
                         <br/>
                         <button class="button" @click="resetError">Opnieuw proberen</button>
                     </div>
@@ -51,8 +52,8 @@ export default {
     }
 }
 </script>
-<style lang="scss">
-.custom-message {
+<style lang="scss" scoped>
+.error-message {
     position: absolute !important;
     top: 0 !important;
     width: 100% !important;
