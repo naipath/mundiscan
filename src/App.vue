@@ -41,6 +41,8 @@
 </template>
 
 <script>
+import Konva from 'konva';
+
 import Heading from "./components/Heading.vue"
 import About from "./components/About.vue"
 import UploadToLaser from "./components/UploadToLaser.vue"
@@ -97,7 +99,6 @@ export default {
     }
 }
 </script>
-
 <style lang="scss" scoped>
 @import "../node_modules/bulma/css/bulma.css";
 
