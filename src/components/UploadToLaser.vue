@@ -19,12 +19,6 @@
                 </span>
                 Afbeelding
             </label>
-            <a class="panel-block" @click="showLaserParameters = true">
-                <span class="panel-icon">
-                    <i class="fa fa-barcode"></i>
-                </span>
-                Parameters
-            </a>
             <a class="panel-block" @click="initialize">
                 <span class="panel-icon">
                     <i class="fa fa-refresh"></i>
@@ -72,8 +66,7 @@
             </div>
         </Modal>
 
-        <ChangeLaserParameter :is-active="showLaserParameters" :on-close="closeLaserParameters"
-        />
+        <ChangeLaserParameter :is-active="showLaserParameters" :on-close="closeLaserParameters" />
 
         <Modal :is-active="isUploading || uploadError">
             <section class="hero is-light has-text-centered">
