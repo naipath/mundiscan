@@ -31,14 +31,14 @@
                             </span>
                         </div>
                         <div class="field-body">
-                            <input type="number" class="input" name="Ip2" placeholder="0" required min="0" max="255">
+                            <input type="number" class="input" name="Ip2" placeholder="195" required min="0" max="255">
                         </div>
                         <div class="field-body">
-                            <input type="number" class="input" name="Ip3" placeholder="195" required min="0"
+                            <input type="number" class="input" name="Ip3" placeholder="0" required min="0"
                                 max="255">
                         </div>
                         <div class="field-body">
-                            <input type="number" class="input" name="Ip4" placeholder="10" required min="0" max="255">
+                            <input type="number" class="input" name="Ip4" placeholder="20" required min="0" max="255">
                         </div>
                     </div>
                 </div>
