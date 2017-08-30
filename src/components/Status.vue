@@ -15,40 +15,35 @@
 
         <div class="columns">
             <div class="column">
-                <div v-for="metric in getRowData('PrintStatus', 'FailureStatus', 'WarningStatus', 'MaintenanceStatus')"
-                    :key="metric[0]">
+                <div v-for="metric in getRowData('PrintStatus', 'FailureStatus', 'WarningStatus', 'MaintenanceStatus')" :key="metric[0]">
                     <label class="checkbox">
                         <input type="checkbox" onclick="return false;" v-model="metric[1]">{{metric[0]}}
                     </label>
                 </div>
             </div>
             <div class="column">
-                <div v-for="metric in getRowData('DetectorFault', 'MarkNotLoaded', 'CodeParametersNotLoaded', 'TestingLaser', 'DisableShutter', 'ExternalUpdateSingleShotNotUpdated', 'ComPortDisconnected', 'BarcodeError')"
-                    :key="metric[0]">
+                <div v-for="metric in getRowData('DetectorFault', 'MarkNotLoaded', 'CodeParametersNotLoaded', 'TestingLaser', 'DisableShutter', 'ExternalUpdateSingleShotNotUpdated', 'ComPortDisconnected', 'BarcodeError')" :key="metric[0]">
                     <label class="checkbox">
                         <input type="checkbox" onclick="return false;" v-model="metric[1]">{{metric[0]}}
                     </label>
                 </div>
             </div>
             <div class="column">
-                <div v-for="metric in getRowData('EStop', 'ExternalInterlocks', 'CoolantTemperature', 'DC24Volts', 'ShutterKeyswitch', 'Keyswitch', 'DC48Volts')"
-                    :key="metric[0]">
+                <div v-for="metric in getRowData('EStop', 'ExternalInterlocks', 'CoolantTemperature', 'DC24Volts', 'ShutterKeyswitch', 'Keyswitch', 'DC48Volts')" :key="metric[0]">
                     <label class="checkbox">
                         <input type="checkbox" onclick="return false;" v-model="metric[1]">{{metric[0]}}
                     </label>
                 </div>
             </div>
             <div class="column">
-                <div v-for="metric in getRowData('CoolantFlow', 'EmissionIndicator', 'ShutterPrint', 'ShutterStandby', 'VSWRError', 'OverModulation', 'TachoFault', 'RFStatus')"
-                    :key="metric[0]">
+                <div v-for="metric in getRowData('CoolantFlow', 'EmissionIndicator', 'ShutterPrint', 'ShutterStandby', 'VSWRError', 'OverModulation', 'TachoFault', 'RFStatus')" :key="metric[0]">
                     <label class="checkbox">
                         <input type="checkbox" onclick="return false;" v-model="metric[1]">{{metric[0]}}
                     </label>
                 </div>
             </div>
             <div class="column">
-                <div v-for="metric in getRowData('SystemEnable', 'VapourExtractorFault', 'GalvoPower', 'GalvoTemperature', 'GalvoCableDisconnected')"
-                    :key="metric[0]">
+                <div v-for="metric in getRowData('SystemEnable', 'VapourExtractorFault', 'GalvoPower', 'GalvoTemperature', 'GalvoCableDisconnected')" :key="metric[0]">
                     <label class="checkbox">
                         <input type="checkbox" onclick="return false;" v-model="metric[1]">{{metric[0]}}
                     </label>
@@ -114,7 +109,6 @@ export default {
                     }
                     throw new Error()
                 })
-                .then(response => response.json())
                 .then(msg => {
                     this.statusMessage = msg.Message
                     this.statusData = msg.Status
