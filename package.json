@@ -10,6 +10,7 @@
     "mock": "json-server --w mock/data.json -p 8100"
   },
   "dependencies": {
+    "bulma": "^0.5.1",
     "url-loader": "^0.5.9",
     "vue": "^2.2.1"
   },

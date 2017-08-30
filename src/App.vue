@@ -20,15 +20,13 @@
                 </div>
 
                 <div v-if="laserclients.length > 0">
-                    <Heading :activeRoute="activeRoute" :routeChanged="routeChanged" :routes="laserclients"
-                        :laserChanged="laserChanged" :activeLaser="activeLaser" />
+                    <Heading :activeRoute="activeRoute" :routeChanged="routeChanged" :routes="laserclients" :laserChanged="laserChanged" :activeLaser="activeLaser" />
 
                     <About v-if="activeRoute === 'about'" />
 
                     <AddLaser v-if="activeRoute === 'add-laser'" :handleLaser="addLaser" />
 
-                    <RemoveLaser v-if="activeRoute === 'remove'" :removed="removeLaser" :laser="activeLaser"
-                    />
+                    <RemoveLaser v-if="activeRoute === 'remove'" :removed="removeLaser" :laser="activeLaser" />
 
                     <UploadToLaser v-if="activeRoute === 'manage-laser'" :laser="activeLaser" />
 
@@ -101,6 +99,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../node_modules/bulma/css/bulma.css";
+
 #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
