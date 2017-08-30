@@ -5,7 +5,7 @@
                 <p class="modal-card-title">Laser parameters aanpassen</p>
                 <button class="delete" aria-label="close" @click="onClose()"></button>
             </header>
-            <form @submit.prevent="onClose()">
+            <form @submit.prevent="alterLaserParameters()">
                 <section class="modal-card-body">
                     <div class="field">
                         <label class="label">Frequency 500-50000hz</label>
@@ -84,6 +84,11 @@ export default {
     props: {
         isActive: Boolean,
         onClose: Function,
+    },
+    methods: {
+        alterLaserParameters() {
+            alert('Er is iets misgegaan, probeer het later nogmaals')
+        }
     }
 }
 </script>
