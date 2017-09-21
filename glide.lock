@@ -1,18 +1,18 @@
 hash: ad1749207d788df7cc3da45cfeb819570597df39ac86d8745511dfa3ec6239d3
-updated: 2017-08-18T10:18:21.815924489+02:00
+updated: 2017-09-21T20:18:35.72828242+02:00
 imports:
 - name: github.com/go-chi/chi
-  version: 25354a53cca531cb2efd3f1d3c565d90ff04d802
+  version: 04ec7fc4179604b2390947258f9143eaae23b596
 - name: github.com/naipath/mundiclient
-  version: e6a5b8d72c1c79be9652feb3cf829e25af923a01
+  version: 26a2bf572449060efe82c0acd4691ae0d85df7e0
 - name: github.com/nfnt/resize
   version: 891127d8d1b52734debe1b3c3d7e747502b6c366
 - name: golang.org/x/image
-  version: 426cfd8eeb6e08ab1932954e09e3c2cb2bc6e36d
+  version: e20db36d77bd0cb36cea8fe49d5c37d82d21591f
   subpackages:
   - bmp
 - name: golang.org/x/text
-  version: e56139fd9c5bc7244c76116c68e500765bb6db6b
+  version: 1cbadb444a806fd9430d14ad08967ed91da4fa0a
   subpackages:
   - encoding
   - encoding/internal
