@@ -1,7 +1,6 @@
 package: github.com/naipath/mundiscan
 import:
 - package: github.com/naipath/mundiclient
-- package: github.com/nfnt/resize
 - package: golang.org/x/image
   subpackages:
   - bmp

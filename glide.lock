@@ -1,5 +1,5 @@
-hash: 236cdf63709edb278ab013f506038c35ba64fed1dc7a6be7ded5e1cfe26ecb29
-updated: 2017-09-28T19:55:06.678524415+02:00
+hash: ffa8d74908708cc92c8ee8c528976fc75366c4d37ed6a3e47c97833cc4f50ccd
+updated: 2017-09-28T20:08:55.93335603+02:00
 imports:
 - name: github.com/disintegration/imaging
   version: c3956f26e8f5f2370428d573648fedc717fbe51e
@@ -7,8 +7,6 @@ imports:
   version: 04ec7fc4179604b2390947258f9143eaae23b596
 - name: github.com/naipath/mundiclient
   version: 26a2bf572449060efe82c0acd4691ae0d85df7e0
-- name: github.com/nfnt/resize
-  version: 891127d8d1b52734debe1b3c3d7e747502b6c366
 - name: golang.org/x/image
   version: e20db36d77bd0cb36cea8fe49d5c37d82d21591f
   subpackages:
