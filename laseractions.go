@@ -14,7 +14,6 @@ import (
 	"github.com/disintegration/imaging"
 	"github.com/go-chi/chi"
 	"github.com/naipath/mundiclient"
-	"github.com/nfnt/resize"
 	"golang.org/x/image/bmp"
 	"gopkg.in/yaml.v2"
 )
@@ -93,14 +92,14 @@ func convertPngToBmp(reader io.Reader, fileName string, invertedImage bool) erro
 	if invertedImage {
 		img = imaging.Invert(img)
 	}
-	resizedImg := resize.Resize(210, 210, img, resize.Lanczos3)
+	img = imaging.Resize(img, 210, 210, imaging.Lanczos)
 
 	f, createErr := os.Create(fileName)
 	defer f.Close()
 	if createErr != nil {
 		return createErr
 	}
-	bmp.Encode(f, resizedImg)
+	bmp.Encode(f, img)
 	return nil
 }
 
