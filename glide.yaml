@@ -8,3 +8,5 @@ import:
 - package: github.com/go-chi/chi
   version: ^3.1.5
 - package: gopkg.in/yaml.v2
+- package: github.com/disintegration/imaging
+  version: ^1.2.2

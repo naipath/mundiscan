@@ -1,19 +1,22 @@
 package main
 
 import (
-	"net/http"
+	"crypto/rand"
 	"encoding/json"
 	"fmt"
-	"os"
-	"io"
 	"image/png"
+	"io"
 	"io/ioutil"
-	"crypto/rand"
-	"gopkg.in/yaml.v2"
-	"golang.org/x/image/bmp"
+	"net/http"
+	"os"
+	"strconv"
+
+	"github.com/disintegration/imaging"
 	"github.com/go-chi/chi"
-	"github.com/nfnt/resize"
 	"github.com/naipath/mundiclient"
+	"github.com/nfnt/resize"
+	"golang.org/x/image/bmp"
+	"gopkg.in/yaml.v2"
 )
 
 type LaserClient struct {
@@ -82,14 +85,16 @@ func getLaserClient(r *http.Request) LaserClient {
 	return LaserClient{}
 }
 
-func convertPngToBmp(reader io.Reader, fileName string) error {
+func convertPngToBmp(reader io.Reader, fileName string, invertedImage bool) error {
 	img, decodeErr := png.Decode(reader)
-
-	resizedImg := resize.Resize(210, 210, img, resize.Lanczos3)
-
 	if decodeErr != nil {
 		return decodeErr
 	}
+	if invertedImage {
+		img = imaging.Invert(img)
+	}
+	resizedImg := resize.Resize(210, 210, img, resize.Lanczos3)
+
 	f, createErr := os.Create(fileName)
 	defer f.Close()
 	if createErr != nil {
@@ -195,6 +200,8 @@ func uploadLogoToLaser(w http.ResponseWriter, r *http.Request) {
 	client := getLaserClient(r)
 	r.ParseMultipartForm(32 << 20)
 	file, handler, err := r.FormFile("uploadfile")
+	invertedImage, _ := strconv.ParseBool(r.FormValue("invertedImage"))
+
 	if err != nil {
 		w.WriteHeader(400)
 		w.Write([]byte("{\"error\": \"Could not retrieve formfield uploadfile\"}"))
@@ -203,7 +210,7 @@ func uploadLogoToLaser(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "%v", handler.Header)
 
 	fileName := *path + "mundi.bmp"
-	convertErr := convertPngToBmp(file, fileName)
+	convertErr := convertPngToBmp(file, fileName, invertedImage)
 	if convertErr != nil {
 		w.WriteHeader(500)
 		w.Write([]byte("{\"error\": \"Could not convert file to bmp\"}"))
@@ -220,7 +227,6 @@ func uploadLogoToLaser(w http.ResponseWriter, r *http.Request) {
 	}
 	file.Close()
 }
-
 
 func generateId() string {
 	b := make([]byte, 16)

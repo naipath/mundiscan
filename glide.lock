@@ -1,6 +1,8 @@
-hash: ad1749207d788df7cc3da45cfeb819570597df39ac86d8745511dfa3ec6239d3
-updated: 2017-09-21T20:18:35.72828242+02:00
+hash: 236cdf63709edb278ab013f506038c35ba64fed1dc7a6be7ded5e1cfe26ecb29
+updated: 2017-09-28T19:55:06.678524415+02:00
 imports:
+- name: github.com/disintegration/imaging
+  version: c3956f26e8f5f2370428d573648fedc717fbe51e
 - name: github.com/go-chi/chi
   version: 04ec7fc4179604b2390947258f9143eaae23b596
 - name: github.com/naipath/mundiclient
@@ -11,6 +13,8 @@ imports:
   version: e20db36d77bd0cb36cea8fe49d5c37d82d21591f
   subpackages:
   - bmp
+  - tiff
+  - tiff/lzw
 - name: golang.org/x/text
   version: 1cbadb444a806fd9430d14ad08967ed91da4fa0a
   subpackages:

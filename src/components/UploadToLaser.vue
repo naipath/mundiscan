@@ -19,6 +19,9 @@
                 </span>
                 Afbeelding
             </label>
+            <label class="checkbox panel-block">
+                <input type="checkbox" v-model="invertedImage">Inverteren
+            </label>
             <a class="panel-block" @click="initialize">
                 <span class="panel-icon">
                     <i class="fa fa-refresh"></i>
@@ -112,6 +115,7 @@ export default {
             showLaserParameters: false,
             isUploading: false,
             uploadError: false,
+            invertedImage: false,
         }
     },
     methods: {
@@ -439,6 +443,7 @@ export default {
 
             const data = new FormData()
             data.append('uploadfile', dataURItoBlob(hiddenCanvas.toDataURL("image/png")), 'mundiscan-' + Date.now() + '.png')
+            data.append('invertedImage', this.invertedImage)
             fetch('/laserclients/' + this.laser.Id + '/upload', {
                 method: 'POST',
                 body: data,
