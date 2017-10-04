@@ -22,4 +22,7 @@ In order to quickly get started use the following command:
 npm run build && go run *.go -statics dist -settings ./settings.yml
 ```
 
-# For copying: 10.195.0.171
+To build the go distribution for raspberry pi:
+```
+env GOOS=linux GOARCH=arm GOARM=7 go build .
+```
