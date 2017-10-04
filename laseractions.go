@@ -84,7 +84,7 @@ func getLaserClient(r *http.Request) LaserClient {
 	return LaserClient{}
 }
 
-func convertPngToBmp(reader io.Reader, fileName string, invertedImage bool) error {
+func convertPngToBmp(reader io.Reader, fileName string, invertedImage bool, imageResolution int) error {
 	img, decodeErr := png.Decode(reader)
 	if decodeErr != nil {
 		return decodeErr
@@ -92,7 +92,7 @@ func convertPngToBmp(reader io.Reader, fileName string, invertedImage bool) erro
 	if invertedImage {
 		img = imaging.Invert(img)
 	}
-	img = imaging.Resize(img, 210, 210, imaging.Lanczos)
+	img = imaging.Resize(img, imageResolution, imageResolution, imaging.Lanczos)
 
 	f, createErr := os.Create(fileName)
 	defer f.Close()
@@ -200,6 +200,7 @@ func uploadLogoToLaser(w http.ResponseWriter, r *http.Request) {
 	r.ParseMultipartForm(32 << 20)
 	file, handler, err := r.FormFile("uploadfile")
 	invertedImage, _ := strconv.ParseBool(r.FormValue("invertedImage"))
+	imageResolution, _ := strconv.ParseInt(r.FormValue("imageResolution"), 10, 16)
 
 	if err != nil {
 		w.WriteHeader(400)
@@ -209,7 +210,7 @@ func uploadLogoToLaser(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "%v", handler.Header)
 
 	fileName := *path + "mundi.bmp"
-	convertErr := convertPngToBmp(file, fileName, invertedImage)
+	convertErr := convertPngToBmp(file, fileName, invertedImage, int(imageResolution))
 	if convertErr != nil {
 		w.WriteHeader(500)
 		w.Write([]byte("{\"error\": \"Could not convert file to bmp\"}"))
