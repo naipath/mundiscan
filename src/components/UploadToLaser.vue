@@ -416,33 +416,19 @@ export default {
             this.uploadError = false
             this.isUploading = true
             rasterLines.forEach(line => line.hide())
+            layer.offsetX(stage.getWidth() / 2 - laserShape / 2)
+            layer.offsetY(stage.getHeight() / 2 - laserShape / 2)
+
+            stage.setWidth(laserShape)
+            stage.setHeight(laserShape)
             layer.draw()
+            stage.draw()
 
-            const croppedStage = stage.toCanvas({
-                width: stage.getWidth(),
-                height: stage.getHeight(),
-            })
-
-            let hiddenCanvas = document.createElement('canvas')
-            hiddenCanvas.style.display = 'none'
-            document.body.appendChild(hiddenCanvas)
-            hiddenCanvas.width = laserShape
-            hiddenCanvas.height = laserShape
-
-            let hiddenContext = hiddenCanvas.getContext('2d')
-            hiddenContext.drawImage(
-                croppedStage,
-                stage.getWidth() / 2 - laserShape / 2,
-                stage.getHeight() / 2 - laserShape / 2,
-                laserShape, laserShape,
-                0, 0,
-                hiddenCanvas.width, hiddenCanvas.height
-            )
-            document.getElementById("download").href = hiddenCanvas.toDataURL("image/png")
+            document.getElementById("download").href = stage.toDataURL("image/png")
             document.getElementById("download").click()
 
             const data = new FormData()
-            data.append('uploadfile', dataURItoBlob(hiddenCanvas.toDataURL("image/png")), 'mundiscan-' + Date.now() + '.png')
+            data.append('uploadfile', dataURItoBlob(stage.toDataURL("image/png")), 'mundiscan-' + Date.now() + '.png')
             data.append('invertedImage', this.invertedImage)
             fetch('/laserclients/' + this.laser.Id + '/upload', {
                 method: 'POST',
@@ -455,12 +441,10 @@ export default {
                     } else {
                         this.uploadError = true
                         this.isUploading = false
-
                     }
                 })
 
-            rasterLines.forEach(line => line.show())
-            layer.draw()
+          this.initialize()
         },
         initialize() {
             stage = new Konva.Stage({

@@ -4,17 +4,13 @@ import (
 	"crypto/rand"
 	"encoding/json"
 	"fmt"
-	"image/png"
-	"io"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"strconv"
 
-	"github.com/disintegration/imaging"
 	"github.com/go-chi/chi"
 	"github.com/naipath/mundiclient"
-	"golang.org/x/image/bmp"
 	"gopkg.in/yaml.v2"
 )
 
@@ -82,25 +78,6 @@ func getLaserClient(r *http.Request) LaserClient {
 		}
 	}
 	return LaserClient{}
-}
-
-func convertPngToBmp(reader io.Reader, fileName string, invertedImage bool, imageResolution int) error {
-	img, decodeErr := png.Decode(reader)
-	if decodeErr != nil {
-		return decodeErr
-	}
-	if invertedImage {
-		img = imaging.Invert(img)
-	}
-	img = imaging.Resize(img, imageResolution, imageResolution, imaging.Lanczos)
-
-	f, createErr := os.Create(fileName)
-	defer f.Close()
-	if createErr != nil {
-		return createErr
-	}
-	bmp.Encode(f, img)
-	return nil
 }
 
 func getLaserClients(w http.ResponseWriter, _ *http.Request) {
@@ -200,7 +177,6 @@ func uploadLogoToLaser(w http.ResponseWriter, r *http.Request) {
 	r.ParseMultipartForm(32 << 20)
 	file, handler, err := r.FormFile("uploadfile")
 	invertedImage, _ := strconv.ParseBool(r.FormValue("invertedImage"))
-	imageResolution, _ := strconv.ParseInt(r.FormValue("imageResolution"), 10, 16)
 
 	if err != nil {
 		w.WriteHeader(400)
@@ -210,7 +186,7 @@ func uploadLogoToLaser(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "%v", handler.Header)
 
 	fileName := *path + "mundi.bmp"
-	convertErr := convertPngToBmp(file, fileName, invertedImage, int(imageResolution))
+	convertErr := convertPngToBmp(file, fileName, invertedImage)
 	if convertErr != nil {
 		w.WriteHeader(500)
 		w.Write([]byte("{\"error\": \"Could not convert file to bmp\"}"))
