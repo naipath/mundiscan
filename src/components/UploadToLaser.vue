@@ -415,6 +415,10 @@ export default {
         uploadToLaser() {
             this.uploadError = false
             this.isUploading = true
+
+            const currentWidth = stage.getWidth()
+            const currentHeight = stage.getHeight()
+
             rasterLines.forEach(line => line.hide())
             layer.offsetX(stage.getWidth() / 2 - laserShape / 2)
             layer.offsetY(stage.getHeight() / 2 - laserShape / 2)
@@ -444,7 +448,14 @@ export default {
                     }
                 })
 
-          this.initialize()
+            stage.setWidth(currentWidth)
+            stage.setHeight(currentHeight)
+            stage.draw()
+
+            rasterLines.forEach(line => line.show())
+            layer.offsetX(0)
+            layer.offsetY(0)
+            layer.draw();
         },
         initialize() {
             stage = new Konva.Stage({
